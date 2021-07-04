@@ -7,7 +7,7 @@ import * as mailGun from 'nodemailer-mailgun-transport';
 import { format } from 'date-fns';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
-import { CustomError } from './customError';
+import { TransporterCreateError } from '../entities/customErrors/TransporterCreateError';
 
 const template = readFileSync(
   resolve(__dirname, '../../resources/email/emailTemplate.html'),
@@ -149,18 +149,9 @@ const sendMail = async (
       return { success: true, data: '' };
     }
 
-    throw new CustomError({
-      message: 'Failed to create Transporter',
-      code: 'TransporterCreateError',
-      status: 400,
-    });
+    throw new TransporterCreateError();
   } catch (error) {
-    throw new CustomError({
-      message: 'Failed to create Transporter',
-      code: 'TransporterCreateError',
-      status: 400,
-      error,
-    });
+    throw new TransporterCreateError(error);
   }
 };
 

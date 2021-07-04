@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CustomError } from './customError';
+import { CustomError } from '../entities/customErrors/CustomError';
 
 export async function sendSlackFeedbackMessage({
   name,

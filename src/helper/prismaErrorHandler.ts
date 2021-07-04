@@ -1,4 +1,4 @@
-import { CustomError } from './customError';
+import { CustomError } from '../entities/customErrors/CustomError';
 
 export const handlePrismaError = (
   error: Error & {

@@ -1,17 +1,18 @@
 import 'reflect-metadata';
 import * as cors from 'cors';
 import * as express from 'express';
-import { ApolloServer, ApolloError } from 'apollo-server-express';
+import { ApolloError, ApolloServer } from 'apollo-server-express';
 import { PrismaClient } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 import { join } from 'path';
-import { CustomError } from './helper/customError';
+import { CustomError } from './entities/customErrors/CustomError';
 import { generateSchema } from './schema';
 import { wsAuthMiddleware } from './helper/jwt';
 import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
 import { forwardAuthEndpoint } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
+import { CustomErrorCode } from './types/ICustomError';
 
 export const boot = async (): Promise<void> => {
   const prisma = new PrismaClient();
@@ -119,6 +120,7 @@ export const boot = async (): Promise<void> => {
 
   if (!process.env.PORT) {
     throw new CustomError({
+      code: CustomErrorCode.ServerStartFailedError,
       message: "Couldn't load port from env file",
     });
   }

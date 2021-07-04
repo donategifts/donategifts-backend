@@ -1,8 +1,10 @@
 import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
 import { Context } from '../types/Context';
 import { Roles, User } from '../entities/user';
-import { CustomError } from '../helper/customError';
+import { CustomError } from '../entities/customErrors/CustomError';
 import { handlePrismaError } from '../helper/prismaErrorHandler';
+import { UserNotFoundError } from '../entities/customErrors/UserNotFoundError';
+import { InvalidInputError } from '../entities/customErrors/InvalidInputError';
 
 @Resolver(User)
 export class UserResolver {
@@ -13,6 +15,9 @@ export class UserResolver {
     @Arg('email', { nullable: true }) email?: string,
   ): Promise<User> {
     try {
+      if (!id && !email) {
+        throw new InvalidInputError('Email or Id has to be provided');
+      }
       const query: {
         id?: number;
         email?: string;
@@ -33,10 +38,7 @@ export class UserResolver {
       });
 
       if (!user) {
-        throw new CustomError({
-          message: 'User not found',
-          code: 'UserNotFoundError',
-        });
+        throw new UserNotFoundError();
       }
 
       return user as User;
@@ -71,10 +73,7 @@ export class UserResolver {
         });
 
         if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
+          throw new UserNotFoundError();
         }
 
         return allUsers;
@@ -90,10 +89,7 @@ export class UserResolver {
         });
 
         if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
+          throw new UserNotFoundError();
         }
 
         return allUsers;
@@ -109,10 +105,7 @@ export class UserResolver {
         });
 
         if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
+          throw new UserNotFoundError();
         }
         return allUsers;
       }
@@ -123,10 +116,7 @@ export class UserResolver {
       });
 
       if (!allUsers.length) {
-        throw new CustomError({
-          message: 'No users where found',
-          code: 'UserNotFoundError',
-        });
+        throw new UserNotFoundError();
       }
       return allUsers;
     } catch (error) {

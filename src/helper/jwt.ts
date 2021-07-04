@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { ITokenPayLoad } from '../types/JWT';
 
-import { CustomError } from './customError';
+import { CustomError } from '../entities/customErrors/CustomError';
 import { logger } from './logger';
 
 export const { JWT_SECRET, JWT_TOKEN_EXPIRES_IN } = process.env;
