@@ -13,29 +13,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mariadb:latest
-        env:
-          MYSQL_USER: mysql
-          MYSQL_PASSWORD: mysql
-          MYSQL_DATABASE: donategifts
-          MYSQL_ROOT_PASSWORD: mysqlroot
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    # services:
+    #   mysql:
+    #     image: mariadb:latest
+    #     env:
+    #       MYSQL_USER: mysql
+    #       MYSQL_PASSWORD: mysql
+    #       MYSQL_DATABASE: donategifts
+    #       MYSQL_ROOT_PASSWORD: mysqlroot
+    #     ports:
+    #       - 3306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Verify MariaDB connection
-        env:
-          PORT: 3306
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
+      # - name: Verify MariaDB connection
+      #   env:
+      #     PORT: 3306
+      #   run: |
+      #     while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+      #       sleep 1
+      #     done
 
       - name: Setup Node
         uses: actions/setup-node@v2
