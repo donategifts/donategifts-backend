@@ -36,7 +36,7 @@ export const boot = async (): Promise<void> => {
         try {
           wsAuthMiddleware(params as any);
         } catch (e) {
-          console.error(`WS client connected error: ${e.message}`);
+          logger.error(`WS client connected error: ${e.message}`);
           throw e;
         }
 
@@ -61,7 +61,7 @@ export const boot = async (): Promise<void> => {
 
         const { locations, path } = err;
 
-        console.error(err.originalError);
+        logger.error(err.originalError);
 
         return {
           ...new ApolloError(message, code, { meta }),
@@ -71,7 +71,7 @@ export const boot = async (): Promise<void> => {
         };
       }
 
-      console.error(err);
+      logger.error(err);
 
       return err;
     },
