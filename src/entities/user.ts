@@ -7,7 +7,6 @@ export enum Roles {
   Donor = 'donor',
   Partner = 'partner',
   Admin = 'admin',
-  Developer = 'developer',
   Guest = 'guest',
 }
 
@@ -21,7 +20,7 @@ export enum UserLoginMode {
 
 @ObjectType({ description: 'User Entity' })
 export class User {
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field(() => ID, {
     name: 'id',
     description: 'the users id in the system',
@@ -53,7 +52,7 @@ export class User {
   })
   public email: string;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'emailVerified',
     description: 'identifier if the users email is verified',
@@ -61,7 +60,7 @@ export class User {
   })
   public emailVerified: boolean;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'emailVerificationHash',
     description: 'verification hash for the email after sign-up',
@@ -69,28 +68,28 @@ export class User {
   })
   public emailVerificationHash: string;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'role',
     description: 'the users role in the system',
   })
   public role: Role;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'loginMode',
     description: 'login mode of the user',
   })
   public loginMode: LoginMode;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'password',
     description: 'the users password',
   })
   public password: string;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'passwordResetToken',
     description: 'a password reset token',
@@ -98,7 +97,7 @@ export class User {
   })
   public passwordResetToken: string;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'passwordResetTokenExpires',
     description: 'expiration date of the reset token',
@@ -106,21 +105,21 @@ export class User {
   })
   public passwordResetTokenExpires: Date;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'createdAt',
     description: 'timestamp of the users creation date',
   })
   public createdAt: Date;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'updatedAt',
     description: 'timestamp of a possible user update',
   })
   public updatedAt: Date;
 
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   @Field({
     name: 'deletedAt',
     description: 'timestamp and identifier if the user was deleted',

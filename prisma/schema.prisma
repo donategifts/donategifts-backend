@@ -163,7 +163,6 @@ enum user_role {
   donor
   partner
   admin
-  developer
 }
 
 enum user_loginMode {

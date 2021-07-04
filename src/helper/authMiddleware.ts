@@ -24,8 +24,7 @@ export const authMiddleware = (
     }
   } else {
     req.user = {
-      // role: 'guest',
-      role: 'developer',
+      role: 'guest',
     };
   }
 

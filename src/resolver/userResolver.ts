@@ -50,7 +50,7 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  @Authorized([Roles.Admin, Roles.Developer])
+  @Authorized([Roles.Admin])
   public async allUsers(
     @Ctx() context: Context,
     @Arg('firstName', { nullable: true }) firstName: string,
