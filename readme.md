@@ -63,6 +63,7 @@ add more test files in **tests** dir
 
 ```
 npm install
+prisma generate
 ```
 
 ## Run App
