@@ -6,7 +6,7 @@ import {
 } from '../../types/ICustomError';
 
 export class CustomError extends Error {
-  public code: CustomErrorCode;
+  public code?: CustomErrorCode | string;
 
   public message: CustomErrorMessage | string;
 

@@ -16,7 +16,9 @@ export class UserResolver {
   ): Promise<User> {
     try {
       if (!id && !email) {
-        throw new InvalidInputError('Email or Id has to be provided');
+        throw new InvalidInputError({
+          message: 'Email or Id has to be provided',
+        });
       }
       const query: {
         id?: number;

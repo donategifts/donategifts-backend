@@ -11,7 +11,7 @@ export enum CustomErrorMessage {
 }
 
 export interface ICustomError {
-  code: CustomErrorCode;
+  code?: CustomErrorCode;
   message: CustomErrorMessage | string;
   status?: number;
   meta?: Record<string, any>;

@@ -6,11 +6,11 @@ import {
 } from '../../types/ICustomError';
 
 export class UserNotFoundError extends CustomError {
-  public constructor() {
-    const userNotFoundError: ICustomError = {
+  public constructor(error?: ICustomError) {
+    super({
+      ...error,
       code: CustomErrorCode.UserNotFoundError,
       message: CustomErrorMessage.UserNotFoundError,
-    };
-    super(userNotFoundError);
+    });
   }
 }

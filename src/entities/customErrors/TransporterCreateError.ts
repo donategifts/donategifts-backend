@@ -6,13 +6,12 @@ import {
 } from '../../types/ICustomError';
 
 export class TransporterCreateError extends CustomError {
-  public constructor(error?: Error) {
-    const transporterCreateError: ICustomError = {
+  public constructor(error?: ICustomError) {
+    super({
+      ...error,
       code: CustomErrorCode.TransporterCreateError,
       message: CustomErrorMessage.TransporterCreateError,
       status: 400,
-      error,
-    };
-    super(transporterCreateError);
+    });
   }
 }
