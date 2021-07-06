@@ -18,7 +18,7 @@ export enum UserLoginMode {
   default = 'default',
 }
 
-@ObjectType({ description: 'User Entity' })
+@ObjectType('User', { description: 'User Entity' })
 export class User {
   @Authorized([Roles.Admin])
   @Field(() => ID, {
