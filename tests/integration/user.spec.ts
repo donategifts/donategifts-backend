@@ -1,10 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import { PrismaClient } from '@prisma/client';
 import { graphql, GraphQLError } from 'graphql';
 import { schema } from '../../src/schema';
 
-const prisma = new PrismaClient();
+let prisma: PrismaClient;
+
+beforeAll(() => {
+  prisma = new PrismaClient();
+});
+
+afterAll(() => {
+  prisma.$disconnect();
+});
 
 describe('User resolver', () => {
   describe('user', () => {
