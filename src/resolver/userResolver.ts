@@ -20,10 +20,11 @@ export class UserResolver {
 
       if (id) {
         query.id = id;
-        if (email) {
-          delete query.id;
-          query.email = email;
-        }
+      }
+
+      if (email) {
+        delete query.id;
+        query.email = email;
       }
 
       const user = await context.prisma.user.findUnique({
@@ -49,73 +50,35 @@ export class UserResolver {
   @Authorized([Roles.ADMIN])
   public async allUsers(
     @Ctx() context: Context,
-    @Arg('firstName', { nullable: true }) firstName: string,
-    @Arg('lastName', { nullable: true }) lastName: string,
+    @Arg('firstName', { nullable: true }) firstName?: string,
+    @Arg('lastName', { nullable: true }) lastName?: string,
     @Arg('limit', { nullable: true }) limit: number = 25,
     @Arg('offset', { nullable: true }) offset: number = 0,
   ): Promise<User[]> {
     try {
       let allUsers: User[] = [];
-      if (firstName && lastName) {
-        allUsers = await context.prisma.user.findMany({
-          where: {
-            firstName,
-            lastName,
-          },
-          take: limit,
-          skip: offset,
-        });
-
-        if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
-        }
-
-        return allUsers;
-      }
+      const query: {
+        where?: {
+          firstName?: string;
+          lastName?: string;
+        };
+        take: number;
+        skip: number;
+      } = {
+        take: limit,
+        skip: offset,
+      };
 
       if (firstName) {
-        allUsers = await context.prisma.user.findMany({
-          where: {
-            firstName,
-          },
-          take: limit,
-          skip: offset,
-        });
-
-        if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
-        }
-
-        return allUsers;
+        query.where.firstName = firstName;
       }
 
       if (lastName) {
-        allUsers = await context.prisma.user.findMany({
-          where: {
-            lastName,
-          },
-          take: limit,
-          skip: offset,
-        });
-
-        if (!allUsers.length) {
-          throw new CustomError({
-            message: 'No users where found',
-            code: 'UserNotFoundError',
-          });
-        }
-        return allUsers;
+        query.where.lastName = lastName;
       }
 
       allUsers = await context.prisma.user.findMany({
-        take: limit,
-        skip: offset,
+        ...query,
       });
 
       if (!allUsers.length) {
