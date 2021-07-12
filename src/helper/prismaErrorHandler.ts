@@ -5,6 +5,10 @@ export const handlePrismaError = (
     code: string;
   },
 ): Error => {
+  if (error instanceof CustomError) {
+    return error;
+  }
+
   const { code } = error;
 
   // TODO: add more handling? https://www.prisma.io/docs/reference/api-reference/error-reference

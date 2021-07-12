@@ -41,10 +41,6 @@ export class UserResolver {
 
       return user as User;
     } catch (error) {
-      if (error instanceof CustomError) {
-        throw error;
-      }
-
       throw handlePrismaError(error);
     }
   }
@@ -130,10 +126,6 @@ export class UserResolver {
       }
       return allUsers;
     } catch (error) {
-      if (error instanceof CustomError) {
-        throw error;
-      }
-
       throw handlePrismaError(error);
     }
   }

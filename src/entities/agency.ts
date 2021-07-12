@@ -4,7 +4,7 @@ import { Roles } from './user';
 @ObjectType('Agency', { description: 'Agency Entity' })
 export class Agency {
   @Authorized([Roles.Admin])
-  @Field((type) => ID, { name: 'id', description: 'Agency id in the system' })
+  @Field(() => ID, { name: 'id', description: 'Agency id in the system' })
   public id: number;
 
   @Authorized([Roles.Admin])
@@ -12,7 +12,7 @@ export class Agency {
   public name: string;
 
   @Authorized([Roles.Admin])
-  @Field({ name: 'bio', description: 'Agency biography' })
+  @Field({ name: 'bio', description: 'Agency biography', nullable: true })
   public bio: string;
 
   @Authorized([Roles.Admin])
@@ -24,11 +24,15 @@ export class Agency {
   public phone: string;
 
   @Authorized([Roles.Admin])
-  @Field({ name: 'website', description: 'Agency website address' })
+  @Field({
+    name: 'website',
+    description: 'Agency website address',
+    nullable: true,
+  })
   public website: string;
 
   @Authorized([Roles.Admin])
-  @Field((type) => ID, {
+  @Field(() => ID, {
     name: 'addressId',
     description: 'Address id from relation',
   })

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
 import { Context } from '../types/Context';
-import { Roles } from '../entities/user';
+import type { Role } from '../entities/user';
 import { extractTokenFromAuthorization } from './jwt';
 
 export const authMiddleware = (
@@ -31,7 +31,7 @@ export const authMiddleware = (
   return next();
 };
 
-export const customAuthChecker: AuthChecker<Context, Roles> = (
+export const customAuthChecker: AuthChecker<Context, Role> = (
   { context },
   roles,
 ) => roles.includes(context.userRole);
