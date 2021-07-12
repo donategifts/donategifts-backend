@@ -1,14 +1,16 @@
 import 'reflect-metadata';
 import * as cors from 'cors';
 import * as express from 'express';
+import { createServer } from 'http';
 import { ApolloServer, ApolloError } from 'apollo-server-express';
 import { PrismaClient } from '@prisma/client';
-import { GraphQLError } from 'graphql';
+import { GraphQLError, execute, subscribe } from 'graphql';
 import { join } from 'path';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { CustomError } from './helper/customError';
 import { generateSchema } from './schema';
-import { wsAuthMiddleware } from './helper/jwt';
-import { pubsub } from './helper/pubSub';
+// import { wsAuthMiddleware } from './helper/jwt';
+// import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
 import { forwardAuthEndpoint } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
@@ -21,7 +23,6 @@ export const boot = async (): Promise<void> => {
   const server = new ApolloServer({
     schema: await generateSchema,
     introspection: !isProductionMode,
-    playground: false,
     context: ({ req }: { req: express.Request }) => {
       const userRole = req.user.role;
 
@@ -31,30 +32,30 @@ export const boot = async (): Promise<void> => {
         prisma,
       };
     },
-    subscriptions: {
-      onConnect: (params, _ws, context) => {
-        try {
-          wsAuthMiddleware(params as any);
-        } catch (error) {
-          logger.error(`WS client connected error: ${error.message}`);
-          throw error;
-        }
+    // subscriptions: {
+    //   onConnect: (params, _ws, context) => {
+    //     try {
+    //       wsAuthMiddleware(params as any);
+    //     } catch (error) {
+    //       logger.error(`WS client connected error: ${error.message}`);
+    //       throw error;
+    //     }
 
-        const { user } = params as any;
-        if (user) {
-          const userRoles = user.roles;
-          return {
-            ...context,
-            pubsub,
-            userRoles,
-          };
-        }
-        return {
-          ...context,
-          pubsub,
-        };
-      },
-    },
+    //     const { user } = params as any;
+    //     if (user) {
+    //       const userRoles = user.roles;
+    //       return {
+    //         ...context,
+    //         pubsub,
+    //         userRoles,
+    //       };
+    //     }
+    //     return {
+    //       ...context,
+    //       pubsub,
+    //     };
+    //   },
+    // },
     formatError: (err: GraphQLError) => {
       if (err.originalError) {
         const { message, code, meta } = err.originalError as CustomError;
@@ -91,6 +92,9 @@ export const boot = async (): Promise<void> => {
       return response;
     },
   });
+
+  server.start();
+
   const app = express();
 
   app.use(cors());
@@ -129,13 +133,37 @@ export const boot = async (): Promise<void> => {
 
   server.applyMiddleware({ app });
 
-  app.listen(port, () => {
+  const httpServer = createServer(app);
+
+  const subscriptionServer = SubscriptionServer.create(
+    {
+      // This is the `schema` we just created.
+      schema: await generateSchema,
+      // These are imported from `graphql`.
+      execute,
+      subscribe,
+    },
+    {
+      // This is the `httpServer` we created in a previous step.
+      server: httpServer,
+      // This `server` is the instance returned from `new ApolloServer`.
+      path: server.graphqlPath,
+    },
+  );
+
+  // Shut down in the case of interrupt and termination signals
+  // We expect to handle this more cleanly in the future. See (#5074)[https://github.com/apollographql/apollo-server/issues/5074] for reference.
+  ['SIGINT', 'SIGTERM'].forEach((signal) => {
+    process.on(signal, () => subscriptionServer.close());
+  });
+
+  httpServer.listen(port, () => {
     logger.info(`Listening on port ${port} ... 🚀`);
     logger.info(
       `Server ready at http://localhost:${port}${server.graphqlPath}`,
     );
     logger.info(
-      `Subscriptions ready at ws://localhost:${port}${server.subscriptionsPath}`,
+      `Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`,
     );
     logger.info(`GraphiQL ready at http://localhost:${port}/graphiql`);
   });
