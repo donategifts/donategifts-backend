@@ -9,8 +9,8 @@ import { join } from 'path';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { CustomError } from './helper/customError';
 import { generateSchema } from './schema';
-// import { wsAuthMiddleware } from './helper/jwt';
-// import { pubsub } from './helper/pubSub';
+import { wsAuthMiddleware } from './helper/jwt';
+import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
 import { forwardAuthEndpoint } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
@@ -32,30 +32,6 @@ export const boot = async (): Promise<void> => {
         prisma,
       };
     },
-    // subscriptions: {
-    //   onConnect: (params, _ws, context) => {
-    //     try {
-    //       wsAuthMiddleware(params as any);
-    //     } catch (error) {
-    //       logger.error(`WS client connected error: ${error.message}`);
-    //       throw error;
-    //     }
-
-    //     const { user } = params as any;
-    //     if (user) {
-    //       const userRoles = user.roles;
-    //       return {
-    //         ...context,
-    //         pubsub,
-    //         userRoles,
-    //       };
-    //     }
-    //     return {
-    //       ...context,
-    //       pubsub,
-    //     };
-    //   },
-    // },
     formatError: (err: GraphQLError) => {
       if (err.originalError) {
         const { message, code, meta } = err.originalError as CustomError;
@@ -107,7 +83,6 @@ export const boot = async (): Promise<void> => {
     res.sendFile(join(__dirname, '../resources/graphiql.html'));
   });
 
-  // eslint-disable-next-line no-unused-vars
   app.use(
     (
       error: CustomError,
@@ -137,16 +112,37 @@ export const boot = async (): Promise<void> => {
 
   const subscriptionServer = SubscriptionServer.create(
     {
-      // This is the `schema` we just created.
       schema: await generateSchema,
-      // These are imported from `graphql`.
       execute,
       subscribe,
+      onConnect: (connectionParams: any, _webSocket: any, context: any) => {
+        try {
+          wsAuthMiddleware(connectionParams as any);
+        } catch (error) {
+          logger.error(`WS client connected error: ${error.message}`);
+          throw error;
+        }
+
+        const { user } = connectionParams as any;
+        if (user) {
+          const userRoles = user.roles;
+          return {
+            ...context,
+            // revisit pubsub since it's not recommended for production
+            // maybe Redis or RabbitMQ?
+            // https://www.apollographql.com/docs/apollo-server/data/subscriptions/#production-pubsub-libraries
+            pubsub,
+            userRoles,
+          };
+        }
+        return {
+          ...context,
+          pubsub,
+        };
+      },
     },
     {
-      // This is the `httpServer` we created in a previous step.
       server: httpServer,
-      // This `server` is the instance returned from `new ApolloServer`.
       path: server.graphqlPath,
     },
   );
