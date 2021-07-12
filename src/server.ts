@@ -8,67 +8,67 @@ import { GraphQLError, execute, subscribe } from 'graphql';
 import { join } from 'path';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { CustomError } from './helper/customError';
-import { generateSchema } from './schema';
+import { schema } from './schema';
 import { wsAuthMiddleware } from './helper/jwt';
 import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
 import { forwardAuthEndpoint } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
 
-export const boot = async (): Promise<void> => {
-  const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
-  const isProductionMode = process.env.NODE_ENV === 'production';
+const isProductionMode = process.env.NODE_ENV === 'production';
 
-  const server = new ApolloServer({
-    schema: await generateSchema,
-    introspection: !isProductionMode,
-    context: ({ req }: { req: express.Request }) => {
-      const userRole = req.user.role;
+export const server = new ApolloServer({
+  schema,
+  introspection: !isProductionMode,
+  context: ({ req }: { req: express.Request }) => {
+    const userRole = req.user.role;
+
+    return {
+      ...req,
+      userRole,
+      prisma,
+    };
+  },
+  formatError: (err: GraphQLError) => {
+    if (err.originalError) {
+      const { message, code, meta } = err.originalError as CustomError;
+
+      const { locations, path } = err;
+
+      logger.error(err.originalError);
 
       return {
-        ...req,
-        userRole,
-        prisma,
+        ...new ApolloError(message, code, { meta }),
+        message,
+        locations,
+        path,
       };
-    },
-    formatError: (err: GraphQLError) => {
-      if (err.originalError) {
-        const { message, code, meta } = err.originalError as CustomError;
+    }
 
-        const { locations, path } = err;
+    logger.error(err);
 
-        logger.error(err.originalError);
+    return err;
+  },
+  formatResponse: (response, { context }: any) => {
+    // prevent introspection for anonymous users
+    // if (
+    //   !userId &&
+    //   response.data &&
+    //   (response.data.__schema || response.data.__type)
+    // ) {
+    //   delete response.data.__schema;
+    //   delete response.data.__type;
+    // }
 
-        return {
-          ...new ApolloError(message, code, { meta }),
-          message,
-          locations,
-          path,
-        };
-      }
+    logger.info('request.user:', context.user);
 
-      logger.error(err);
+    return response;
+  },
+});
 
-      return err;
-    },
-    formatResponse: (response, { context }: any) => {
-      // prevent introspection for anonymous users
-      // if (
-      //   !userId &&
-      //   response.data &&
-      //   (response.data.__schema || response.data.__type)
-      // ) {
-      //   delete response.data.__schema;
-      //   delete response.data.__type;
-      // }
-
-      logger.info('request.user:', context.user);
-
-      return response;
-    },
-  });
-
+export const boot = async (): Promise<void> => {
   await server.start();
 
   const app = express();
@@ -112,7 +112,7 @@ export const boot = async (): Promise<void> => {
 
   const subscriptionServer = SubscriptionServer.create(
     {
-      schema: await generateSchema,
+      schema: await schema,
       execute,
       subscribe,
       onConnect: (connectionParams: any, _webSocket: any, context: any) => {
