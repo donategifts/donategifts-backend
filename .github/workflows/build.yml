@@ -13,6 +13,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      MYSQL_USER: jack
+      MYSQL_PASSWORD: sparrow
+      MYSQL_ROOT_PASSWORD: asdf1234qwer
+      MYSQL_DATABASE: donategifts
+      MYSQL_URL: mysql://jack:sparrow@localhost:3306/donategifts
+
     # services:
     #   mysql:
     #     image: mariadb:latest
