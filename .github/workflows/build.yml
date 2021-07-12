@@ -13,6 +13,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      MYSQL_USER: jack
+      MYSQL_PASSWORD: sparrow
+      MYSQL_ROOT_PASSWORD: asdf1234qwer
+      MYSQL_DATABASE: donategifts
+      MYSQL_URL: mysql://jack:sparrow@localhost:3306/donategifts
+
     # services:
     #   mysql:
     #     image: mariadb:latest
@@ -28,6 +35,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Build the docker-compose stack
+        run: docker-compose up -d
 
       # - name: Verify MariaDB connection
       #   env:

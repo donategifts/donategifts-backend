@@ -58,8 +58,12 @@ export class UserResolver {
     try {
       const query: {
         where?: {
-          firstName?: string;
-          lastName?: string;
+          firstName?: {
+            contains: string;
+          };
+          lastName?: {
+            contains: string;
+          };
         };
         take: number;
         skip: number;
@@ -69,11 +73,20 @@ export class UserResolver {
       };
 
       if (firstName) {
-        query.where.firstName = firstName;
+        query.where = {
+          firstName: {
+            contains: firstName,
+          },
+        };
       }
 
       if (lastName) {
-        query.where.lastName = lastName;
+        query.where = {
+          ...query.where,
+          lastName: {
+            contains: lastName,
+          },
+        };
       }
 
       const allUsers = await context.prisma.user.findMany({
