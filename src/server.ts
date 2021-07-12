@@ -69,7 +69,7 @@ export const boot = async (): Promise<void> => {
     },
   });
 
-  server.start();
+  await server.start();
 
   const app = express();
 
