@@ -1,6 +1,5 @@
 import * as jwt from 'jsonwebtoken';
 import { ITokenPayLoad } from '../types/JWT';
-
 import { CustomError } from './customError';
 import { logger } from './logger';
 

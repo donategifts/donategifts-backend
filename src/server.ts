@@ -35,9 +35,9 @@ export const boot = async (): Promise<void> => {
       onConnect: (params, _ws, context) => {
         try {
           wsAuthMiddleware(params as any);
-        } catch (e) {
-          logger.error(`WS client connected error: ${e.message}`);
-          throw e;
+        } catch (error) {
+          logger.error(`WS client connected error: ${error.message}`);
+          throw error;
         }
 
         const { user } = params as any;
@@ -106,13 +106,15 @@ export const boot = async (): Promise<void> => {
   // eslint-disable-next-line no-unused-vars
   app.use(
     (
-      err: CustomError,
+      error: CustomError,
       _req: express.Request,
       res: express.Response,
       _next: express.NextFunction,
     ) => {
       res.send({
-        errors: [new ApolloError(err.message, err.code, { meta: err.meta })],
+        errors: [
+          new ApolloError(error.message, error.code, { meta: error.meta }),
+        ],
       });
     },
   );

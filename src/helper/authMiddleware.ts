@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
 import { Context } from '../types/Context';
-import type { Role } from '../entities/user';
+import { Role, Roles } from '../entities/user';
 import { extractTokenFromAuthorization } from './jwt';
 
 export const authMiddleware = (
@@ -24,7 +24,7 @@ export const authMiddleware = (
     }
   } else {
     req.user = {
-      role: Number(process.env.SKIP_AUTH) ? 'admin' : 'guest',
+      role: Number(process.env.SKIP_AUTH) ? Roles.ADMIN : Roles.GUEST,
     };
   }
 
