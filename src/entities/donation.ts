@@ -9,35 +9,35 @@ export enum DonationStatus {
 }
 
 export class Donation {
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'Message id in the system' })
   public id: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'wishcardId', description: '' })
   public wishcardId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'userId', description: '' })
   public userId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({ name: 'amount', description: '' })
   public amount: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({ name: 'status', description: '' })
   public status: donation_status;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({ name: 'createdAt', description: '' })
   public createdAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({ name: 'updatedAt', description: '' })
   public updatedAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({ name: 'deletedAt', description: '', nullable: true })
   public deletedAt: Date;
 }

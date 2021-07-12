@@ -2,18 +2,18 @@ import { Authorized, Field, ID } from 'type-graphql';
 import { Roles } from './user';
 
 export class Address {
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'Address id in the system' })
   public id: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'address1',
     description: '',
   })
   public address1: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'address2',
     description: '',
@@ -21,42 +21,42 @@ export class Address {
   })
   public address2: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'city',
     description: '',
   })
   public city: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'country',
     description: '',
   })
   public country: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'state',
     description: '',
   })
   public state: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'createdAt',
     description: '',
   })
   public createdAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'updatedAt',
     description: '',
   })
   public updatedAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'deletedAt',
     description: '',

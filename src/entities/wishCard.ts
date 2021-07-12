@@ -9,53 +9,53 @@ export enum WishCardStatus {
 }
 
 export class WishCard {
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'WishCard id in the system' })
   public id: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'image',
     description: '',
   })
   public image: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'itemPrice',
     description: '',
   })
   public itemPrice: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'itemUrl',
     description: '',
   })
   public itemUrl: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'childId',
     description: '',
   })
   public childId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'agencyId',
     description: '',
   })
   public agencyId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'createdBy',
     description: '',
   })
   public createdBy: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'isLockedBy',
     description: '',
@@ -63,7 +63,7 @@ export class WishCard {
   })
   public isLockedBy: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'isLockedUntil',
     description: '',
@@ -71,14 +71,14 @@ export class WishCard {
   })
   public isLockedUntil: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'status',
     description: '',
   })
   public status: wish_card_status;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'occasion',
     description: '',
@@ -86,21 +86,21 @@ export class WishCard {
   })
   public occasion: string;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'createdAt',
     description: '',
   })
   public createdAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'updatedAt',
     description: '',
   })
   public updatedAt: Date;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field({
     name: 'deletedAt',
     description: '',

@@ -2,29 +2,29 @@ import { Authorized, Field, ID, ObjectType } from 'type-graphql';
 import { Roles } from './user';
 
 export enum AgencyRole {
-  Admin = 'admin',
-  Member = 'Member',
+  ADMIN = 'admin',
+  MEMBER = 'Member',
 }
 
 @ObjectType('AgencyMembers')
 export class AgencyMembers {
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'AgencyMember id in the system' })
   public id: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'userId',
   })
   public userId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => ID, {
     name: 'agencyId',
   })
   public agencyId: number;
 
-  @Authorized([Roles.Admin])
+  @Authorized([Roles.ADMIN])
   @Field(() => AgencyRole, {
     name: 'agencyRole',
     description: 'The role of a agency member',
