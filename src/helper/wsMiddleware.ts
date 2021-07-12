@@ -15,7 +15,7 @@ export const forwardAuthEndpoint = async (
   const token = String(path?.split('/').pop());
 
   try {
-    jwt.verify(token, JWT_SECRET!, { algorithms: [JWT_ALGORITHM] });
+    jwt.verify(token, JWT_SECRET, { algorithms: [JWT_ALGORITHM] });
   } catch (_error) {
     return res.status(403).send();
   }

@@ -98,7 +98,7 @@ export const generateCustomToken = (
   tokenPayload: ITokenPayLoad,
   subject: string,
   tokenExpiresIn = String(JWT_TOKEN_EXPIRES_IN),
-): { token: string } => {
+): string => {
   const jwtBaseOptions: jwt.SignOptions = {
     algorithm: JWT_ALGORITHM,
     issuer: 'donategifts',
@@ -108,5 +108,5 @@ export const generateCustomToken = (
 
   const token = jwt.sign(tokenPayload, String(JWT_SECRET), jwtBaseOptions);
 
-  return { token };
+  return token;
 };
