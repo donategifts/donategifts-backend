@@ -56,7 +56,6 @@ export class UserResolver {
     @Arg('offset', { nullable: true }) offset: number = 0,
   ): Promise<User[]> {
     try {
-      let allUsers: User[] = [];
       const query: {
         where?: {
           firstName?: string;
@@ -77,7 +76,7 @@ export class UserResolver {
         query.where.lastName = lastName;
       }
 
-      allUsers = await context.prisma.user.findMany({
+      const allUsers = await context.prisma.user.findMany({
         ...query,
       });
 
