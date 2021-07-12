@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   roots: ['<rootDir>/tests'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
@@ -12,3 +12,5 @@ module.exports = {
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.(js|tsx?)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
+
+export default config;

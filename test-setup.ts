@@ -1,4 +1,2 @@
-import * as dotenv from 'dotenv';
-
-dotenv.config();
-dotenv.config({ path: './default.env' });
+import 'reflect-metadata';
+import './loadEnv';
