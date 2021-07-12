@@ -5,8 +5,7 @@
     "schedule:weekly"
   ],
   "assignees": [
-    "Enubia",
-    "Gnorbsl"
+    "Enubia"
   ],
   "assigneesSampleSize": 1,
   "separateMinorPatch": true,

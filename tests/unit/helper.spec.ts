@@ -1,14 +1,28 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { jest, describe, expect, it, beforeEach } from '@jest/globals';
+import {
+  jest,
+  describe,
+  expect,
+  it,
+  beforeEach,
+  beforeAll,
+} from '@jest/globals';
 import { Request, Response } from 'express';
-import { authMiddleware } from '../src/helper/authMiddleware';
-import { decodeToken } from '../src/helper/jwt';
+import { authMiddleware } from '../../src/helper/authMiddleware';
+import { CustomError } from '../../src/helper/customError';
+import { decodeToken, generateCustomToken } from '../../src/helper/jwt';
 
 const invalidToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZG9lLmNvbSIsInJvbGUiOiJkb25vciIsImlhdCI6MTYyNDUyMjM5NCwiZXhwIjoyMDk3ODg2Mzk0LCJpc3MiOiJiYXRjaCIsInN1YiI6ImxvZ2luIn0.H208djQzS1VOZ5QI4lV9cfppUgwq_ZfYO1P1O5geQnU';
 
-const validToken =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkb25hdGVnaWZ0cyIsImlhdCI6MTYyNDUyNDU3NywiZXhwIjoxNjU2MDYwNTc5LCJhdWQiOiJhc2RmMTIzNHdlciIsInN1YiI6ImxvZ2luIiwiZW1haWwiOiJqb2huQGRvZS5jb20iLCJyb2xlIjoiZG9ub3IifQ.Ty72cK0sci367Id7uHdjXDWjNj25N85iqBfLZgzqhYk';
+let validToken: string;
+
+beforeAll(() => {
+  validToken = generateCustomToken(
+    { email: 'john@doe.com', role: 'donor' },
+    'login',
+  );
+});
 
 describe('Helper', () => {
   describe('jwt', () => {
@@ -21,9 +35,10 @@ describe('Helper', () => {
     });
   });
 
-  describe.skip('authMiddleware', () => {
+  describe('authMiddleware', () => {
     let mockRequest: Request;
     let mockResponse: Response;
+
     const nextFunction = jest.fn();
 
     beforeEach(() => {
@@ -54,6 +69,24 @@ describe('Helper', () => {
       authMiddleware(mockRequest, mockResponse, nextFunction);
 
       expect(mockRequest.user).toMatchObject(expectedResponse);
+    });
+  });
+
+  describe('customError', () => {
+    it('should throw a custom error object if thrown', () => {
+      const expectedResult: CustomError = {
+        name: 'TestError',
+        message: 'Test Error',
+        code: 'TestErrorCode',
+        status: 400,
+      };
+
+      const throwing = (): CustomError => {
+        throw new CustomError(expectedResult);
+      };
+
+      expect(throwing).toThrowError(CustomError);
+      expect(throwing).toThrow(expectedResult);
     });
   });
 });
