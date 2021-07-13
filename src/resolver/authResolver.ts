@@ -67,8 +67,8 @@ export class AuthResolver {
 
       if (!user || !compare(password, user.password)) {
         throw new CustomError({
-          message: 'Incorrect email or password',
-          code: 'INCORRECT_EMAIL_OR_PASSWORD',
+          message: 'Incorrect password',
+          code: 'INCORRECT_PASSWORD',
           status: 403,
         });
       }
