@@ -101,7 +101,7 @@ export async function sendDonationNotificationToSlack({
 }: {
   service: string;
   userDonation: number;
-  donor: { fName: string; lName: string };
+  donor: { firstName: string; lastName: string };
   wishCard: { childFirstName: string; childLastName: string; id: number };
   amount: number;
 }): Promise<void> {
@@ -111,8 +111,8 @@ export async function sendDonationNotificationToSlack({
       url: `${process.env.SLACK_INTEGRATION_DONATION}`,
       data: JSON.stringify({
         text: `${process.env.NODE_ENV} New ${service} Donation by ${
-          donor.fName
-        } ${donor.lName.substring(0, 1)} for ${
+          donor.firstName
+        } ${donor.lastName.substring(0, 1)} for ${
           wishCard.childFirstName
         } ${wishCard.childLastName.substring(0, 1)} details: ${
           process.env.BASE_URL

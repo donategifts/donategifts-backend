@@ -33,24 +33,6 @@ describe('User resolver', () => {
       expect(result.errors).toBeDefined();
     });
 
-    it('Should have errors if no user was found', async () => {
-      const query = `
-          {
-            user(email: "lettuce@king.com") {
-              id
-              firstName
-              lastName
-              email
-            }
-          }
-        `;
-
-      const result = await graphql(schema, query, undefined, { prisma });
-
-      expect(result.errors[0]).toBeInstanceOf(GraphQLError);
-      expect(result.errors[0].message).toMatch('User not found');
-    });
-
     it('Should have errors if the permission does not match', async () => {
       const query = `
           {
@@ -69,6 +51,27 @@ describe('User resolver', () => {
       expect(result.errors[0].message).toMatch(
         "Access denied! You don't have permission for this action!",
       );
+    });
+
+    it('Should have errors if no user was found', async () => {
+      const query = `
+          {
+            user(email: "lettuce@king.com") {
+              id
+              firstName
+              lastName
+              email
+            }
+          }
+        `;
+
+      const result = await graphql(schema, query, undefined, {
+        prisma,
+        userRole: 'admin',
+      });
+
+      expect(result.errors[0]).toBeInstanceOf(GraphQLError);
+      expect(result.errors[0].message).toMatch('User not found');
     });
 
     it('Should return a user object', async () => {
