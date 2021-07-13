@@ -1,5 +1,10 @@
-import { user } from '@prisma/client';
+import { Role } from '../entities/user';
 
-export interface ITokenPayLoad extends Partial<user> {
+export interface TokenPayLoad {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  role?: Role;
   isRefreshToken?: boolean;
 }

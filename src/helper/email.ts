@@ -9,7 +9,7 @@ import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { CustomError } from './customError';
 
-const template = readFileSync(
+const emailTemplate = readFileSync(
   resolve(__dirname, '../../resources/email/emailTemplate.html'),
   {
     encoding: 'utf-8',
@@ -213,7 +213,7 @@ export const sendVerificationEmail = async ({
   success: boolean;
   data?: string | false;
 }> => {
-  const body = template
+  const body = emailTemplate
     .replace(
       '%linkplaceholder%',
       `${process.env.BASE_URL}/users/verify/${hash}`,
@@ -245,7 +245,7 @@ export const sendPasswordResetMail = async ({
   success: boolean;
   data?: string | false;
 }> => {
-  const body = template
+  const body = emailTemplate
     .replace(
       '%linkplaceholder%',
       `${process.env.BASE_URL}/users/password/reset/${hash}`,

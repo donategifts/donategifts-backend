@@ -9,11 +9,11 @@ import { join } from 'path';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { CustomError } from './helper/customError';
 import { schema } from './schema';
-import { wsAuthMiddleware } from './helper/jwt';
 import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
-import { forwardAuthEndpoint } from './helper/wsMiddleware';
+import { forwardAuthEndpoint, wsAuthMiddleware } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
+import { Roles } from './entities/user';
 
 const prisma = new PrismaClient();
 
@@ -53,14 +53,14 @@ export const server = new ApolloServer({
   },
   formatResponse: (response, { context }: any) => {
     // prevent introspection for anonymous users
-    // if (
-    //   !userId &&
-    //   response.data &&
-    //   (response.data.__schema || response.data.__type)
-    // ) {
-    //   delete response.data.__schema;
-    //   delete response.data.__type;
-    // }
+    if (
+      (!context.userRole || context.userRole === Roles.GUEST) &&
+      response.data &&
+      (response.data.__schema || response.data.__type)
+    ) {
+      delete response.data.__schema;
+      delete response.data.__type;
+    }
 
     logger.info('request.user:', context.user);
 
