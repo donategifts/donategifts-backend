@@ -1,4 +1,5 @@
 import { CustomError } from './customError';
+import { logger } from './logger';
 
 export const handlePrismaError = (
   error: Error & {
@@ -66,6 +67,10 @@ export const handlePrismaError = (
         error,
       });
     default:
+      if (process.env.NODE_ENV === 'development') {
+        logger.error(error);
+      }
+
       return new CustomError({
         message: 'Unhandled Prisma Error',
         code: 'UnhandledPrismaError',
