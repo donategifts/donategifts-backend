@@ -4,11 +4,7 @@ import { Context } from '../types/Context';
 import { Role, Roles } from '../entities/user';
 import { extractTokenFromAuthorization } from './jwt';
 
-export const authMiddleware = (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void => {
+export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
   req.user = {};
 
   if (req.headers && req.headers.authorization) {
@@ -31,7 +27,5 @@ export const authMiddleware = (
   return next();
 };
 
-export const customAuthChecker: AuthChecker<Context, Role> = (
-  { context },
-  roles,
-) => roles.includes(context.userRole);
+export const customAuthChecker: AuthChecker<Context, Role> = ({ context }, roles) =>
+  roles.includes(context.userRole);

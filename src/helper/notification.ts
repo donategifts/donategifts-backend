@@ -116,9 +116,7 @@ export async function sendDonationNotificationToSlack({
           wishCard.childFirstName
         } ${wishCard.childLastName.substring(0, 1)} details: ${
           process.env.BASE_URL
-        }/wishcards/admin/${
-          wishCard.id
-        }, amount: ${amount} with ${userDonation} for us`,
+        }/wishcards/admin/${wishCard.id}, amount: ${amount} with ${userDonation} for us`,
       }),
     });
   } catch (error) {

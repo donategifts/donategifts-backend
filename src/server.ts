@@ -90,9 +90,7 @@ export const boot = async (): Promise<void> => {
       _next: express.NextFunction,
     ) => {
       res.send({
-        errors: [
-          new ApolloError(error.message, error.code, { meta: error.meta }),
-        ],
+        errors: [new ApolloError(error.message, error.code, { meta: error.meta })],
       });
     },
   );
@@ -154,12 +152,8 @@ export const boot = async (): Promise<void> => {
 
   httpServer.listen(port, () => {
     logger.info(`Listening on port ${port} ... 🚀`);
-    logger.info(
-      `Server ready at http://localhost:${port}${server.graphqlPath}`,
-    );
-    logger.info(
-      `Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`,
-    );
+    logger.info(`Server ready at http://localhost:${port}${server.graphqlPath}`);
+    logger.info(`Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`);
     logger.info(`GraphiQL ready at http://localhost:${port}/graphiql`);
   });
 };
