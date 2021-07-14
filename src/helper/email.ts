@@ -1,20 +1,13 @@
-import {
-  createTestAccount,
-  createTransport,
-  getTestMessageUrl,
-} from 'nodemailer';
+import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemailer';
 import * as mailGun from 'nodemailer-mailgun-transport';
 import { format } from 'date-fns';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { CustomError } from './customError';
 
-const template = readFileSync(
-  resolve(__dirname, '../../resources/email/emailTemplate.html'),
-  {
-    encoding: 'utf-8',
-  },
-);
+const emailTemplate = readFileSync(resolve(__dirname, '../../resources/email/emailTemplate.html'), {
+  encoding: 'utf-8',
+});
 const donationTemplate = readFileSync(
   resolve(__dirname, '../../resources/email/donorDonationReceipt.html'),
   {
@@ -25,18 +18,12 @@ const donationTemplate = readFileSync(
 const donationTemplateAttachments = [
   {
     filename: 'new-donate-gifts-logo-2.png',
-    path: resolve(
-      __dirname,
-      '../../resources/email/new-donate-gifts-logo-2.png',
-    ),
+    path: resolve(__dirname, '../../resources/email/new-donate-gifts-logo-2.png'),
     cid: 'new-donate-gifts-logo-2.png',
   },
   {
     filename: 'email-gifts-illustration-removebg-preview.png',
-    path: resolve(
-      __dirname,
-      '../../resources/email/email-gifts-illustration-removebg-preview.png',
-    ),
+    path: resolve(__dirname, '../../resources/email/email-gifts-illustration-removebg-preview.png'),
     cid: 'email-gifts-illustration-removebg-preview.png',
   },
   {
@@ -73,10 +60,7 @@ const templateAttachments = [
   },
   {
     filename: 'new-donate-gifts-logo-2.png',
-    path: resolve(
-      __dirname,
-      '../../resources/email/new-donate-gifts-logo-2.png',
-    ),
+    path: resolve(__dirname, '../../resources/email/new-donate-gifts-logo-2.png'),
     cid: 'new-donate-gifts-logo-2.png', // same cid value as in the html img src
   },
   {
@@ -213,11 +197,8 @@ export const sendVerificationEmail = async ({
   success: boolean;
   data?: string | false;
 }> => {
-  const body = template
-    .replace(
-      '%linkplaceholder%',
-      `${process.env.BASE_URL}/users/verify/${hash}`,
-    )
+  const body = emailTemplate
+    .replace('%linkplaceholder%', `${process.env.BASE_URL}/users/verify/${hash}`)
     .replace('%headerPlaceHolder%', 'Verify Your Email Account')
     .replace('%titlePlaceHolder%', 'Thank you for creating an account!')
     .replace(
@@ -245,17 +226,11 @@ export const sendPasswordResetMail = async ({
   success: boolean;
   data?: string | false;
 }> => {
-  const body = template
-    .replace(
-      '%linkplaceholder%',
-      `${process.env.BASE_URL}/users/password/reset/${hash}`,
-    )
+  const body = emailTemplate
+    .replace('%linkplaceholder%', `${process.env.BASE_URL}/users/password/reset/${hash}`)
     .replace('%titlePlaceHolder%', 'Your password reset request')
     .replace('%headerPlaceHolder%', '')
-    .replace(
-      '%bodyPlaceHolder%',
-      'Please click the button below to reset your password',
-    )
+    .replace('%bodyPlaceHolder%', 'Please click the button below to reset your password')
     .replace('%buttonText%', 'Reset Password');
 
   return sendMail(
@@ -269,8 +244,7 @@ export const sendPasswordResetMail = async ({
 
 export const createEmailVerificationHash = (): string => {
   let result = '';
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   for (let i = 0; i < 18; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));

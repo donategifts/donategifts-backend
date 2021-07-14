@@ -1,4 +1,5 @@
 import { CustomError } from './customError';
+import { logger } from './logger';
 
 export const handlePrismaError = (
   error: Error & {
@@ -15,16 +16,14 @@ export const handlePrismaError = (
   switch (code) {
     case 'P2000':
       return new CustomError({
-        message:
-          "The provided value for the column is too long for the column's type.",
+        message: "The provided value for the column is too long for the column's type.",
         code: 'ColumnLength',
         status: 500,
         error,
       });
     case 'P2001':
       return new CustomError({
-        message:
-          'The record searched for in the where condition does not exist',
+        message: 'The record searched for in the where condition does not exist',
         code: 'RecordMissing',
         status: 500,
         error,
@@ -66,6 +65,10 @@ export const handlePrismaError = (
         error,
       });
     default:
+      if (process.env.NODE_ENV === 'development') {
+        logger.error(error);
+      }
+
       return new CustomError({
         message: 'Unhandled Prisma Error',
         code: 'UnhandledPrismaError',

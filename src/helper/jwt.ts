@@ -1,22 +1,18 @@
 import * as jwt from 'jsonwebtoken';
-import { ITokenPayLoad } from '../types/JWT';
+import { TokenPayLoad } from '../types/JWT';
 import { CustomError } from './customError';
 import { logger } from './logger';
 
 export const { JWT_SECRET, JWT_TOKEN_EXPIRES_IN } = process.env;
 export const JWT_ALGORITHM = 'HS256';
 
-export const decodeToken = (
-  token: string,
-  throwOnExpired = true,
-  quiet = false,
-): ITokenPayLoad => {
-  let decoded = {} as ITokenPayLoad;
+export const decodeToken = (token: string, throwOnExpired = true, quiet = false): TokenPayLoad => {
+  let decoded = {} as TokenPayLoad;
 
   try {
-    decoded = jwt.verify(token, String(JWT_SECRET), {
+    decoded = <TokenPayLoad>jwt.verify(token, String(JWT_SECRET), {
       algorithms: [JWT_ALGORITHM],
-    }) as ITokenPayLoad;
+    });
   } catch (error) {
     if (throwOnExpired && error instanceof jwt.TokenExpiredError) {
       throw new CustomError({
@@ -35,9 +31,7 @@ export const decodeToken = (
   return decoded;
 };
 
-export const extractTokenFromAuthorization = (
-  authHeader: string,
-): ITokenPayLoad | null => {
+export const extractTokenFromAuthorization = (authHeader: string): TokenPayLoad | null => {
   const authHeaderParts = authHeader.split(' ');
 
   if (authHeaderParts.length !== 2) {
@@ -73,29 +67,8 @@ export const extractTokenFromAuthorization = (
   return null;
 };
 
-export const wsAuthMiddleware = (params: {
-  user: ITokenPayLoad;
-  authorization: string;
-}): void => {
-  params.user = {} as ITokenPayLoad;
-
-  if (params.authorization) {
-    const decoded = extractTokenFromAuthorization(params.authorization);
-    if (decoded && !decoded.isRefreshToken) {
-      const { id, firstName, lastName, role } = decoded;
-
-      params.user = {
-        id,
-        firstName,
-        lastName,
-        role,
-      };
-    }
-  }
-};
-
 export const generateCustomToken = (
-  tokenPayload: ITokenPayLoad,
+  tokenPayload: TokenPayLoad,
   subject: string,
   tokenExpiresIn = String(JWT_TOKEN_EXPIRES_IN),
 ): string => {

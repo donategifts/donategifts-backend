@@ -9,10 +9,9 @@ import { join } from 'path';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { CustomError } from './helper/customError';
 import { schema } from './schema';
-import { wsAuthMiddleware } from './helper/jwt';
 import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
-import { forwardAuthEndpoint } from './helper/wsMiddleware';
+import { forwardAuthEndpoint, wsAuthMiddleware } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
 
 const prisma = new PrismaClient();
@@ -54,7 +53,7 @@ export const server = new ApolloServer({
   formatResponse: (response, { context }: any) => {
     // prevent introspection for anonymous users
     // if (
-    //   !userId &&
+    //   (!context.userRole || context.userRole === Roles.GUEST) &&
     //   response.data &&
     //   (response.data.__schema || response.data.__type)
     // ) {
@@ -91,9 +90,7 @@ export const boot = async (): Promise<void> => {
       _next: express.NextFunction,
     ) => {
       res.send({
-        errors: [
-          new ApolloError(error.message, error.code, { meta: error.meta }),
-        ],
+        errors: [new ApolloError(error.message, error.code, { meta: error.meta })],
       });
     },
   );
@@ -155,12 +152,8 @@ export const boot = async (): Promise<void> => {
 
   httpServer.listen(port, () => {
     logger.info(`Listening on port ${port} ... 🚀`);
-    logger.info(
-      `Server ready at http://localhost:${port}${server.graphqlPath}`,
-    );
-    logger.info(
-      `Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`,
-    );
+    logger.info(`Server ready at http://localhost:${port}${server.graphqlPath}`);
+    logger.info(`Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`);
     logger.info(`GraphiQL ready at http://localhost:${port}/graphiql`);
   });
 };
