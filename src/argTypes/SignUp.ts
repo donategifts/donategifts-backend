@@ -21,4 +21,8 @@ export class SignUp {
 
   @Field()
   public role: user_role;
+
+  public get emailToLower(): string {
+    return this.email.toLowerCase();
+  }
 }
