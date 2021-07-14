@@ -73,7 +73,7 @@ export class AuthResolver {
         where: { email },
       });
 
-      if (!user || !compare(password, user.password)) {
+      if (!user || !(await compare(password, user.password))) {
         throw new CustomError({
           message: 'Incorrect password',
           code: 'INCORRECT_PASSWORD',

@@ -1,14 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect, afterAll } from '@jest/globals';
 import { PrismaClient } from '@prisma/client';
 import { graphql, GraphQLError } from 'graphql';
 import { schema } from '../../src/schema';
 
-let prisma: PrismaClient;
-
-beforeAll(() => {
-  prisma = new PrismaClient();
-});
+const prisma = new PrismaClient();
 
 afterAll(() => {
   prisma.$disconnect();
@@ -56,7 +52,7 @@ describe('User resolver', () => {
     it('Should have errors if no user was found', async () => {
       const query = `
           {
-            user(email: "lettuce@king.com") {
+            user(email: "john@cena.com") {
               id
               firstName
               lastName
