@@ -1,9 +1,6 @@
 name: Run build and test pipeline
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types: [review_requested, ready_for_review]
 
