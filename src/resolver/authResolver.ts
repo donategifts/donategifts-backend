@@ -19,8 +19,10 @@ export class AuthResolver {
   @Mutation(() => EmailVerificationHashObject)
   public async signUp(
     @Ctx() context: Context,
-    @Args() { emailToLower, password, role, firstName, lastName, loginMode }: SignUp,
+    @Args() signUpArgs: SignUp,
   ): Promise<{ hash: string }> {
+    const { emailToLower, password, role, firstName, lastName, loginMode } =
+      signUpArgs;
     if (context.userRole !== Roles.GUEST) {
       throw new CustomError({
         message: 'User already logged in',
@@ -30,7 +32,10 @@ export class AuthResolver {
     }
 
     try {
-      const hashPassword = await hash(password, parseInt(process.env.BCRYPT_SALT_ROUNDS, 10));
+      const hashPassword = await hash(
+        password,
+        parseInt(process.env.BCRYPT_SALT_ROUNDS, 10),
+      );
 
       const emailVerificationHash = createEmailVerificationHash();
       await context.prisma.user.create({
@@ -126,7 +131,10 @@ export class AuthResolver {
       });
 
       return {
-        token: generateCustomToken({ email: user.email, role: user.role }, 'verifyEmail'),
+        token: generateCustomToken(
+          { email: user.email, role: user.role },
+          'verifyEmail',
+        ),
       };
     } catch (error) {
       throw handlePrismaError(error);
@@ -154,7 +162,10 @@ export class AuthResolver {
         data: {
           passwordResetToken: resetToken,
           passwordResetTokenExpires: add(new Date(), {
-            minutes: parseInt(process.env.RESET_PASSWORD_EXPIRATION_MINUTES, 10),
+            minutes: parseInt(
+              process.env.RESET_PASSWORD_EXPIRATION_MINUTES,
+              10,
+            ),
           }),
         },
       });
@@ -193,7 +204,10 @@ export class AuthResolver {
         data: {
           passwordResetToken: null,
           passwordResetTokenExpires: null,
-          password: await hash(password, parseInt(process.env.BCRYPT_SALT_ROUNDS, 10)),
+          password: await hash(
+            password,
+            parseInt(process.env.BCRYPT_SALT_ROUNDS, 10),
+          ),
         },
       });
 

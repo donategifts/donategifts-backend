@@ -6,7 +6,11 @@ import { logger } from './logger';
 export const { JWT_SECRET, JWT_TOKEN_EXPIRES_IN } = process.env;
 export const JWT_ALGORITHM = 'HS256';
 
-export const decodeToken = (token: string, throwOnExpired = true, quiet = false): TokenPayLoad => {
+export const decodeToken = (
+  token: string,
+  throwOnExpired = true,
+  quiet = false,
+): TokenPayLoad => {
   let decoded = {} as TokenPayLoad;
 
   try {
@@ -31,7 +35,9 @@ export const decodeToken = (token: string, throwOnExpired = true, quiet = false)
   return decoded;
 };
 
-export const extractTokenFromAuthorization = (authHeader: string): TokenPayLoad | null => {
+export const extractTokenFromAuthorization = (
+  authHeader: string,
+): TokenPayLoad | null => {
   const authHeaderParts = authHeader.split(' ');
 
   if (authHeaderParts.length !== 2) {

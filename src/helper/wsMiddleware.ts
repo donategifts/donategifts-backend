@@ -1,10 +1,17 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { TokenPayLoad } from '../types/JWT';
-import { extractTokenFromAuthorization, JWT_ALGORITHM, JWT_SECRET } from './jwt';
+import {
+  extractTokenFromAuthorization,
+  JWT_ALGORITHM,
+  JWT_SECRET,
+} from './jwt';
 import { logger } from './logger';
 
-export const forwardAuthEndpoint = async (req: Request, res: Response): Promise<any> => {
+export const forwardAuthEndpoint = async (
+  req: Request,
+  res: Response,
+): Promise<any> => {
   const { carrier } = req.query;
 
   logger.log(`executing auth-check for carrier: ${carrier}`);
@@ -21,7 +28,10 @@ export const forwardAuthEndpoint = async (req: Request, res: Response): Promise<
   return res.status(200).send();
 };
 
-export const wsAuthMiddleware = (params: { user: TokenPayLoad; authorization: string }): void => {
+export const wsAuthMiddleware = (params: {
+  user: TokenPayLoad;
+  authorization: string;
+}): void => {
   params.user = {} as TokenPayLoad;
 
   if (params.authorization) {
