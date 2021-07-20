@@ -49,7 +49,9 @@ describe('Auth resolver', () => {
       const result = await graphql(schema, query, undefined, { prisma });
 
       expect(result.errors).toBeDefined();
-      expect(result.errors[0].message).toMatch('String cannot represent a non string value: 0');
+      expect(result.errors[0].message).toMatch(
+        'String cannot represent a non string value: 0',
+      );
     });
 
     it('should register a new user and return a verification hash', async () => {
@@ -68,7 +70,10 @@ describe('Auth resolver', () => {
         }
       `;
 
-      const result = await graphql(schema, query, undefined, { prisma, userRole: Roles.GUEST });
+      const result = await graphql(schema, query, undefined, {
+        prisma,
+        userRole: Roles.GUEST,
+      });
 
       expect(result.errors).not.toBeDefined();
       expect(result.data).toBeDefined();
@@ -120,7 +125,10 @@ describe('Auth resolver', () => {
         }
       `;
 
-      const result = await graphql(schema, query, undefined, { prisma, userRole: Roles.GUEST });
+      const result = await graphql(schema, query, undefined, {
+        prisma,
+        userRole: Roles.GUEST,
+      });
 
       expect(result.errors).toBeDefined();
       expect(result.errors[0].message).toMatch('');
@@ -136,7 +144,10 @@ describe('Auth resolver', () => {
       `;
 
       // mock logged in mode with applying a role other than guest
-      const result = await graphql(schema, query, undefined, { prisma, userRole: Roles.ADMIN });
+      const result = await graphql(schema, query, undefined, {
+        prisma,
+        userRole: Roles.ADMIN,
+      });
 
       expect(result.errors).toBeDefined();
       expect(result.errors[0].message).toMatch('');
@@ -151,7 +162,10 @@ describe('Auth resolver', () => {
         }
       `;
 
-      const result = await graphql(schema, query, undefined, { prisma, userRole: Roles.GUEST });
+      const result = await graphql(schema, query, undefined, {
+        prisma,
+        userRole: Roles.GUEST,
+      });
 
       expect(result.errors).not.toBeDefined();
       expect(result.data.login.token).toBeDefined();
