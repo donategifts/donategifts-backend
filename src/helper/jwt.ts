@@ -1,10 +1,22 @@
-import * as jwt from 'jsonwebtoken';
+import {
+  Algorithm,
+  SignOptions,
+  verify,
+  sign,
+  TokenExpiredError,
+} from 'jsonwebtoken';
+import { Role } from '../entities/user';
 import { TokenPayLoad } from '../types/JWT';
 import { CustomError } from './customError';
 import { logger } from './logger';
 
-export const { JWT_SECRET, JWT_TOKEN_EXPIRES_IN } = process.env;
-export const JWT_ALGORITHM = 'HS256';
+export const {
+  JWT_SECRET,
+  JWT_TOKEN_EXPIRES_IN,
+  JWT_REFRESH_TOKEN_EXPIRES_IN,
+  JWT_ISSUER,
+  JWT_ALGORITHM,
+} = process.env;
 
 export const decodeToken = (
   token: string,
@@ -14,11 +26,11 @@ export const decodeToken = (
   let decoded = {} as TokenPayLoad;
 
   try {
-    decoded = <TokenPayLoad>jwt.verify(token, String(JWT_SECRET), {
-      algorithms: [JWT_ALGORITHM],
+    decoded = <TokenPayLoad>verify(token, JWT_SECRET, {
+      algorithms: [JWT_ALGORITHM as Algorithm],
     });
   } catch (error) {
-    if (throwOnExpired && error instanceof jwt.TokenExpiredError) {
+    if (throwOnExpired && error instanceof TokenExpiredError) {
       throw new CustomError({
         message: 'Token expired',
         code: 'AuthorizationTokenExpiredError',
@@ -73,19 +85,69 @@ export const extractTokenFromAuthorization = (
   return null;
 };
 
+export const generateToken = (
+  user: { firstName: string; lastName: string; email: string },
+  role: Role,
+  includeRefreshToken?: boolean,
+  tokenExpiresIn = JWT_TOKEN_EXPIRES_IN,
+): { token: string; refreshToken?: string } => {
+  const tokenData = {} as {
+    token: string;
+    refreshToken?: string;
+  };
+
+  const { firstName, lastName, email } = user;
+
+  const jwtBaseOptions: SignOptions = {
+    algorithm: JWT_ALGORITHM as Algorithm,
+    issuer: JWT_ISSUER,
+    subject: user.email,
+  };
+
+  const tokenPayload: TokenPayLoad = {
+    firstName,
+    lastName,
+    email,
+    role,
+  };
+
+  const token = sign(tokenPayload, JWT_SECRET, {
+    ...jwtBaseOptions,
+    expiresIn: tokenExpiresIn,
+  });
+
+  tokenData.token = token;
+
+  if (includeRefreshToken) {
+    const refreshTokenPayload = {
+      ...tokenPayload,
+      isRefreshToken: true,
+    };
+
+    const refreshToken = sign(refreshTokenPayload, JWT_SECRET, {
+      ...jwtBaseOptions,
+      expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
+    });
+
+    tokenData.refreshToken = refreshToken;
+  }
+
+  return tokenData;
+};
+
 export const generateCustomToken = (
   tokenPayload: TokenPayLoad,
   subject: string,
   tokenExpiresIn = String(JWT_TOKEN_EXPIRES_IN),
 ): string => {
-  const jwtBaseOptions: jwt.SignOptions = {
-    algorithm: JWT_ALGORITHM,
-    issuer: 'donategifts',
+  const jwtBaseOptions: SignOptions = {
+    algorithm: JWT_ALGORITHM as Algorithm,
+    issuer: JWT_ISSUER,
     subject,
     expiresIn: tokenExpiresIn,
   };
 
-  const token = jwt.sign(tokenPayload, String(JWT_SECRET), jwtBaseOptions);
+  const token = sign(tokenPayload, JWT_SECRET, jwtBaseOptions);
 
   return token;
 };
