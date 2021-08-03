@@ -20,7 +20,9 @@ export const forwardAuthEndpoint = async (
   const token = String(path?.split('/').pop());
 
   try {
-    jwt.verify(token, JWT_SECRET, { algorithms: [JWT_ALGORITHM] });
+    jwt.verify(token, JWT_SECRET, {
+      algorithms: [JWT_ALGORITHM as jwt.Algorithm],
+    });
   } catch (_error) {
     return res.status(403).send();
   }
@@ -37,10 +39,9 @@ export const wsAuthMiddleware = (params: {
   if (params.authorization) {
     const decoded = extractTokenFromAuthorization(params.authorization);
     if (decoded && !decoded.isRefreshToken) {
-      const { id, firstName, lastName, role } = decoded;
+      const { firstName, lastName, role } = decoded;
 
       params.user = {
-        id,
         firstName,
         lastName,
         role,
