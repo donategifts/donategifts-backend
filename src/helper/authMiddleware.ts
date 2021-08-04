@@ -16,7 +16,7 @@ async function getAndSetUserRole(token: auth.DecodedIdToken) {
   });
 
   if (!user) {
-    throw new Error('User not found');
+    throw new Error('CREATE NEW USER OR SOMETHING');
   }
 
   await admin.auth().setCustomUserClaims(token.uid, { role: user.role });
@@ -39,6 +39,7 @@ export const authMiddleware = async (
     req.user = {
       email: decodedToken.email,
       role: decodedToken.role || (await getAndSetUserRole(decodedToken)),
+      uid: decodedToken.uid,
     };
   } catch (error) {
     console.log(error);
