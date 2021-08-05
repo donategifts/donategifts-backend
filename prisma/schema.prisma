@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider          = "mysql"
-  url               = env("MYSQL_URL")
+  url               = env("POSTGRES_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 

@@ -1,17 +1,16 @@
 version: '3'
 
 services:
-  mariadb:
-    image: mariadb
+  postgres:
+    image: postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
-      MYSQL_DATABASE: '${MYSQL_DATABASE}'
-      MYSQL_USER: '${MYSQL_USER}'
-      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+      POSTGRES_DB: '${POSTGRES_DATABASE}'
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
     ports:
-      - 3306:3306
+      - 5432:5432
     expose:
-      - 3306
+      - 5432
     volumes:
       - ./scripts:/docker-entrypoint-initdb.d

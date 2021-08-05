@@ -1,6 +1,6 @@
 USE donategifts;
 
-INSERT INTO user (firstName, lastName, email, emailVerified, password, role, loginMode) VALUES ('Loraine', 'Keems', 'lkeems0@google.com.br', false, 'ACE2ZhZG', 'partner', 'default');
+INSERT INTO user (firstName, lastName, email, emailVerified, password, role, loginMode) VALUES ('Loraine', 'Keems', 'patric@donate-gifts.com', false, 'ACE2ZhZG', 'partner', 'default');
 INSERT INTO user (firstName, lastName, email, emailVerified, password, role, loginMode) VALUES ('Ode', 'Grichukhanov', 'ogrichukhanov1@360.cn', false, 'ZUdVcsqT', 'donor', 'facebook');
 INSERT INTO user (firstName, lastName, email, emailVerified, password, role, loginMode) VALUES ('Katina', 'Shurlock', 'kshurlock2@goodreads.com', true, 'c3RZcyXs729', 'donor', 'google');
 INSERT INTO user (firstName, lastName, email, emailVerified, password, role, loginMode) VALUES ('Elbertina', 'Dellit', 'edellit3@tripadvisor.com', false, 'X4kZxIZ1CAVu', 'donor', 'google');
