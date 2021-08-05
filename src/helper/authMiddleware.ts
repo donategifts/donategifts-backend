@@ -5,6 +5,8 @@ import { auth } from 'firebase-admin/lib/auth';
 import { Context } from '../types/Context';
 import { Role } from '../entities/user';
 import prisma from '../db/prisma';
+import { logger } from './logger';
+import { CustomError } from './customError';
 
 admin.initializeApp();
 
@@ -16,7 +18,11 @@ async function getAndSetUserRole(token: auth.DecodedIdToken) {
   });
 
   if (!user) {
-    throw new Error('CREATE NEW USER OR SOMETHING');
+    throw new CustomError({
+      message: 'No user found with that email',
+      code: 'User not found',
+      status: 403,
+    });
   }
 
   await admin.auth().setCustomUserClaims(token.uid, { role: user.role });
@@ -42,7 +48,7 @@ export const authMiddleware = async (
       uid: decodedToken.uid,
     };
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 
   return next();
