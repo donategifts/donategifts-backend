@@ -11,7 +11,6 @@ import { CustomError } from './helper/customError';
 import { schema } from './schema';
 import { pubsub } from './helper/pubSub';
 import { authMiddleware } from './helper/authMiddleware';
-import { forwardAuthEndpoint, wsAuthMiddleware } from './helper/wsMiddleware';
 import { logger } from './helper/logger';
 
 const isProductionMode = process.env.NODE_ENV === 'production';
@@ -72,8 +71,6 @@ export const boot = async (): Promise<void> => {
 
   app.use(cors());
 
-  app.all('/forward-auth', forwardAuthEndpoint);
-
   app.use(authMiddleware);
 
   app.use('/graphiql', (_req, res) => {
@@ -113,13 +110,6 @@ export const boot = async (): Promise<void> => {
       execute,
       subscribe,
       onConnect: (connectionParams: any, _webSocket: any, context: any) => {
-        try {
-          wsAuthMiddleware(connectionParams as any);
-        } catch (error) {
-          logger.error(`WS client connected error: ${error.message}`);
-          throw error;
-        }
-
         const { user } = connectionParams as any;
         if (user) {
           const userRoles = user.roles;

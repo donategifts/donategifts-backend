@@ -3,7 +3,7 @@ import { AuthChecker } from 'type-graphql';
 import * as admin from 'firebase-admin';
 import { auth } from 'firebase-admin/lib/auth';
 import { Context } from '../types/Context';
-import { Role } from '../entities/user';
+import { Role, Roles } from '../entities/user';
 import prisma from '../db/prisma';
 import { logger } from './logger';
 import { CustomError } from './customError';
@@ -38,6 +38,13 @@ export const authMiddleware = async (
   req.user = {};
 
   try {
+    if (!req.headers || !req.headers.authorization) {
+      req.user = {
+        role: Roles.GUEST,
+      };
+      return next();
+    }
+
     const decodedToken = await admin
       .auth()
       .verifyIdToken(req.headers.authorization);
@@ -49,32 +56,9 @@ export const authMiddleware = async (
     };
   } catch (error) {
     logger.error(error);
-
   }
 
   return next();
-
-  /*
-  if (req.headers && req.headers.authorization) {
-    const decoded = extractTokenFromAuthorization(req.headers.authorization);
-
-    if (decoded && !decoded.isRefreshToken) {
-      const { email, role } = decoded;
-
-      req.user = {
-        email,
-        role,
-      };
-    }
-  } else {
-    req.user = {
-      role: Number(process.env.SKIP_AUTH) ? Roles.ADMIN : Roles.GUEST,
-    };
-  }
-
-  return next();
-
-   */
 };
 
 export const customAuthChecker: AuthChecker<Context, Role> = (
