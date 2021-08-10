@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable global-require */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-template-curly-in-string */
 
 (() => {
   const fs = require('fs');
