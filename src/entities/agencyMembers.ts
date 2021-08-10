@@ -1,5 +1,5 @@
 import { Authorized, Field, ID, ObjectType } from 'type-graphql';
-import { Roles } from './user';
+import { roles } from '@prisma/client';
 
 export enum AgencyRole {
   ADMIN = 'admin',
@@ -8,23 +8,23 @@ export enum AgencyRole {
 
 @ObjectType('AgencyMembers')
 export class AgencyMembers {
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'AgencyMember id in the system' })
   public id: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'userId',
   })
   public userId: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'agencyId',
   })
   public agencyId: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => AgencyRole, {
     name: 'agencyRole',
     description: 'The role of a agency member',

@@ -1,6 +1,7 @@
 import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
+import { roles } from '@prisma/client';
 import { Context } from '../types/Context';
-import { Roles, User } from '../entities/user';
+import { User } from '../entities/user';
 import { CustomError } from '../helper/customError';
 import { handlePrismaError } from '../helper/prismaErrorHandler';
 
@@ -47,7 +48,7 @@ export class UserResolver {
   }
 
   @Query(() => [User])
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   public async allUsers(
     @Ctx() context: Context,
     @Arg('firstName', { nullable: true }) firstName?: string,

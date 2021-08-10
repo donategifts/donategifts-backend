@@ -10,12 +10,11 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:latest
+        image: postgres:latest
         env:
-          MYSQL_USER: mysql
-          MYSQL_PASSWORD: mysql
-          MYSQL_DATABASE: donategifts
-          MYSQL_ROOT_PASSWORD: mysqlroot
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: donategifts
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
@@ -61,7 +60,7 @@ jobs:
         run: npm install
 
       - name: Create Firebase credential file
-        run: ./firebase-credentials.sh && cat donate-gifts.json
+        run: ./firebase-credentials.sh
 
       - name: Eslint
         run: npm run lint

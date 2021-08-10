@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
 import * as admin from 'firebase-admin';
+import { roles } from '@prisma/client';
 import { Context } from '../types/Context';
-import { Role, Roles } from '../entities/user';
 import prisma from '../db/prisma';
 import { logger } from './logger';
 import { CustomError } from './customError';
@@ -39,7 +39,7 @@ export const authMiddleware = async (
   try {
     if (!req.headers || !req.headers.authorization) {
       req.user = {
-        role: Roles.GUEST,
+        role: roles.GUEST,
       };
       return next();
     }
@@ -60,7 +60,7 @@ export const authMiddleware = async (
   return next();
 };
 
-export const customAuthChecker: AuthChecker<Context, Role> = (
+export const customAuthChecker: AuthChecker<Context, roles> = (
   { context },
-  roles,
-) => roles.includes(context.userRole);
+  userRoles,
+) => userRoles.includes(context.userRole);

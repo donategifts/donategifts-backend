@@ -1,8 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { describe, it, afterAll, expect } from '@jest/globals';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, roles } from '@prisma/client';
 import { graphql } from 'graphql';
-import { Roles } from '../../src/entities/user';
 import { schema } from '../../src/schema';
 
 const prisma = new PrismaClient();
@@ -72,7 +71,7 @@ describe('Auth resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: Roles.GUEST,
+        userRole: roles.GUEST,
       });
 
       expect(result.errors).not.toBeDefined();
@@ -127,7 +126,7 @@ describe('Auth resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: Roles.GUEST,
+        userRole: roles.GUEST,
       });
 
       expect(result.errors).toBeDefined();
@@ -146,7 +145,7 @@ describe('Auth resolver', () => {
       // mock logged in mode with applying a role other than guest
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: Roles.ADMIN,
+        userRole: roles.ADMIN,
       });
 
       expect(result.errors).toBeDefined();
@@ -164,7 +163,7 @@ describe('Auth resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: Roles.GUEST,
+        userRole: roles.GUEST,
       });
 
       expect(result.errors).not.toBeDefined();

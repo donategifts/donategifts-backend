@@ -1,9 +1,9 @@
-import { Role } from '../entities/user';
+import { roles } from '@prisma/client';
 
 export interface TokenPayLoad {
   firstName?: string;
   lastName?: string;
   email?: string;
-  role?: Role;
+  role?: roles;
   isRefreshToken?: boolean;
 }

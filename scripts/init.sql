@@ -35,13 +35,13 @@ CREATE TYPE "animal_type" AS ENUM (
 
 CREATE TABLE "user" (
   "id" SERIAL PRIMARY KEY,
-  "firstName" varchar,
-  "lastName" varchar,
+  "firstName" varchar NOT NULL,
+  "lastName" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
   "uid" varchar UNIQUE NOT NULL,
   "role" roles NOT NULL DEFAULT 'DONOR',
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -49,6 +49,9 @@ CREATE TABLE "agencyMember" (
   "userId" int NOT NULL,
   "agencyId" int NOT NULL,
   "agencyRole" agency_roles DEFAULT 'MEMBER',
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
+  "deletedAt" timestamp,
   PRIMARY KEY ("userId", "agencyId")
 );
 
@@ -61,8 +64,8 @@ CREATE TABLE "agency" (
   "website" varchar,
   "createdBy" int NOT NULL,
   "addressId" int NOT NULL,
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -75,11 +78,9 @@ CREATE TABLE "wishcard" (
   "agencyId" int NOT NULL,
   "createdBy" int NOT NULL,
   "addressId" int NOT NULL,
-  "isLockedBy" int,
-  "isLockedUntil" timestamp,
   "status" wishcard_status NOT NULL DEFAULT 'DRAFT',
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -91,8 +92,8 @@ CREATE TABLE "child" (
   "lastName" varchar,
   "interest" varchar,
   "bio" varchar,
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -104,15 +105,18 @@ CREATE TABLE "animal" (
   "breed" varchar,
   "age" int,
   "bio" varchar,
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
 CREATE TABLE "images" (
   "id" int PRIMARY KEY,
   "wishcardId" int NOT NULL,
-  "path" varchar NOT NULL
+  "path" varchar NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
+  "deletedAt" timestamp
 );
 
 CREATE TABLE "address" (
@@ -122,8 +126,8 @@ CREATE TABLE "address" (
   "city" varchar NOT NULL,
   "country" varchar NOT NULL,
   "state" varchar NOT NULL,
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -132,8 +136,8 @@ CREATE TABLE "message" (
   "userId" int NOT NULL,
   "wishcardId" int NOT NULL,
   "message" varchar NOT NULL,
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -143,8 +147,8 @@ CREATE TABLE "donation" (
   "userId" int NOT NULL,
   "donationPrice" float NOT NULL,
   "status" donation_status NOT NULL DEFAULT 'DONATED',
-  "createdAt" timestamp,
-  "updatedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT (now()),
+  "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
 );
 
@@ -165,8 +169,6 @@ ALTER TABLE "wishcard" ADD FOREIGN KEY ("agencyId") REFERENCES "agency" ("id");
 ALTER TABLE "wishcard" ADD FOREIGN KEY ("createdBy") REFERENCES "user" ("id");
 
 ALTER TABLE "wishcard" ADD FOREIGN KEY ("addressId") REFERENCES "address" ("id");
-
-ALTER TABLE "wishcard" ADD FOREIGN KEY ("isLockedBy") REFERENCES "user" ("id");
 
 ALTER TABLE "images" ADD FOREIGN KEY ("wishcardId") REFERENCES "wishcard" ("id");
 

@@ -15,8 +15,8 @@ model address {
   city      String     @db.VarChar
   country   String     @db.VarChar
   state     String     @db.VarChar
-  createdAt DateTime?  @db.Timestamp(6)
-  updatedAt DateTime?  @db.Timestamp(6)
+  createdAt DateTime   @default(now()) @db.Timestamp(6)
+  updatedAt DateTime   @default(now()) @db.Timestamp(6)
   deletedAt DateTime?  @db.Timestamp(6)
   agency    agency[]
   wishcard  wishcard[]
@@ -31,8 +31,8 @@ model agency {
   website      String?        @db.VarChar
   createdBy    Int
   addressId    Int
-  createdAt    DateTime?      @db.Timestamp(6)
-  updatedAt    DateTime?      @db.Timestamp(6)
+  createdAt    DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime       @default(now()) @db.Timestamp(6)
   deletedAt    DateTime?      @db.Timestamp(6)
   address      address        @relation(fields: [addressId], references: [id])
   user         user           @relation(fields: [createdBy], references: [id])
@@ -44,6 +44,9 @@ model agencyMember {
   userId     Int
   agencyId   Int
   agencyRole agency_roles? @default(MEMBER)
+  createdAt  DateTime      @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime      @default(now()) @db.Timestamp(6)
+  deletedAt  DateTime?     @db.Timestamp(6)
   agency     agency        @relation(fields: [agencyId], references: [id])
   user       user          @relation(fields: [userId], references: [id])
 
@@ -58,8 +61,8 @@ model animal {
   breed     String?      @db.VarChar
   age       Int?
   bio       String?      @db.VarChar
-  createdAt DateTime?    @db.Timestamp(6)
-  updatedAt DateTime?    @db.Timestamp(6)
+  createdAt DateTime     @default(now()) @db.Timestamp(6)
+  updatedAt DateTime     @default(now()) @db.Timestamp(6)
   deletedAt DateTime?    @db.Timestamp(6)
   wishcard  wishcard[]
 }
@@ -72,8 +75,8 @@ model child {
   lastName  String?    @db.VarChar
   interest  String?    @db.VarChar
   bio       String?    @db.VarChar
-  createdAt DateTime?  @db.Timestamp(6)
-  updatedAt DateTime?  @db.Timestamp(6)
+  createdAt DateTime   @default(now()) @db.Timestamp(6)
+  updatedAt DateTime   @default(now()) @db.Timestamp(6)
   deletedAt DateTime?  @db.Timestamp(6)
   wishcard  wishcard[]
 }
@@ -84,8 +87,8 @@ model donation {
   userId        Int
   donationPrice Float
   status        donation_status @default(DONATED)
-  createdAt     DateTime?       @db.Timestamp(6)
-  updatedAt     DateTime?       @db.Timestamp(6)
+  createdAt     DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime        @default(now()) @db.Timestamp(6)
   deletedAt     DateTime?       @db.Timestamp(6)
   user          user            @relation(fields: [userId], references: [id])
   wishcard      wishcard        @relation(fields: [wishcardId], references: [id])
@@ -95,10 +98,13 @@ model donation {
 }
 
 model images {
-  id         Int      @id
+  id         Int       @id
   wishcardId Int
-  path       String   @db.VarChar
-  wishcard   wishcard @relation(fields: [wishcardId], references: [id])
+  path       String    @db.VarChar
+  createdAt  DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime  @default(now()) @db.Timestamp(6)
+  deletedAt  DateTime? @db.Timestamp(6)
+  wishcard   wishcard  @relation(fields: [wishcardId], references: [id])
 
   @@index([wishcardId], name: "images_wishcardId_idx")
 }
@@ -108,8 +114,8 @@ model message {
   userId     Int
   wishcardId Int
   message    String    @db.VarChar
-  createdAt  DateTime? @db.Timestamp(6)
-  updatedAt  DateTime? @db.Timestamp(6)
+  createdAt  DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt  DateTime  @default(now()) @db.Timestamp(6)
   deletedAt  DateTime? @db.Timestamp(6)
   user       user      @relation(fields: [userId], references: [id])
   wishcard   wishcard  @relation(fields: [wishcardId], references: [id])
@@ -119,50 +125,46 @@ model message {
 }
 
 model user {
-  id                                 Int            @id @default(autoincrement())
-  firstName                          String?        @db.VarChar
-  lastName                           String?        @db.VarChar
-  email                              String         @unique @db.VarChar
-  uid                                String         @unique @db.VarChar
-  role                               roles          @default(DONOR)
-  createdAt                          DateTime?      @db.Timestamp(6)
-  updatedAt                          DateTime?      @db.Timestamp(6)
-  deletedAt                          DateTime?      @db.Timestamp(6)
-  agency                             agency[]
-  agencyMember                       agencyMember[]
-  donation                           donation[]
-  message                            message[]
-  wishcard_userTowishcard_createdBy  wishcard[]     @relation("userTowishcard_createdBy")
-  wishcard_userTowishcard_isLockedBy wishcard[]     @relation("userTowishcard_isLockedBy")
+  id                                Int            @id @default(autoincrement())
+  firstName                         String         @db.VarChar
+  lastName                          String         @db.VarChar
+  email                             String         @unique @db.VarChar
+  uid                               String         @unique @db.VarChar
+  role                              roles          @default(DONOR)
+  createdAt                         DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt                         DateTime       @default(now()) @db.Timestamp(6)
+  deletedAt                         DateTime?      @db.Timestamp(6)
+  agency                            agency[]
+  agencyMember                      agencyMember[]
+  donation                          donation[]
+  message                           message[]
+  wishcard_userTowishcard_createdBy wishcard[]     @relation("userTowishcard_createdBy")
 
   @@index([email], name: "user_email_idx")
   @@index([uid], name: "user_uid_idx")
 }
 
 model wishcard {
-  id                             Int             @id
-  imagePath                      String          @db.VarChar
-  itemPrice                      Float
-  itemUrl                        String          @db.VarChar
-  entityId                       Int
-  agencyId                       Int
-  createdBy                      Int
-  addressId                      Int
-  isLockedBy                     Int?
-  isLockedUntil                  DateTime?       @db.Timestamp(6)
-  status                         wishcard_status @default(DRAFT)
-  createdAt                      DateTime?       @db.Timestamp(6)
-  updatedAt                      DateTime?       @db.Timestamp(6)
-  deletedAt                      DateTime?       @db.Timestamp(6)
-  address                        address         @relation(fields: [addressId], references: [id])
-  agency                         agency          @relation(fields: [agencyId], references: [id])
-  user_userTowishcard_createdBy  user            @relation("userTowishcard_createdBy", fields: [createdBy], references: [id])
-  child                          child           @relation(fields: [entityId], references: [id])
-  animal                         animal          @relation(fields: [entityId], references: [id])
-  user_userTowishcard_isLockedBy user?           @relation("userTowishcard_isLockedBy", fields: [isLockedBy], references: [id])
-  donation                       donation[]
-  images                         images[]
-  message                        message[]
+  id                            Int             @id
+  imagePath                     String          @db.VarChar
+  itemPrice                     Float
+  itemUrl                       String          @db.VarChar
+  entityId                      Int
+  agencyId                      Int
+  createdBy                     Int
+  addressId                     Int
+  status                        wishcard_status @default(DRAFT)
+  createdAt                     DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt                     DateTime        @default(now()) @db.Timestamp(6)
+  deletedAt                     DateTime?       @db.Timestamp(6)
+  address                       address         @relation(fields: [addressId], references: [id])
+  agency                        agency          @relation(fields: [agencyId], references: [id])
+  user_userTowishcard_createdBy user            @relation("userTowishcard_createdBy", fields: [createdBy], references: [id])
+  animal                        animal          @relation(fields: [entityId], references: [id])
+  child                         child           @relation(fields: [entityId], references: [id])
+  donation                      donation[]
+  images                        images[]
+  message                       message[]
 
   @@index([agencyId], name: "wishcard_agencyId_idx")
   @@index([createdBy], name: "wishcard_createdBy_idx")
