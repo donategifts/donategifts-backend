@@ -19,7 +19,7 @@
       client_x509_cert_url: '${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}',
     };
 
-    fs.writeFileSync('donate-gifts.json', JSON.stringify(fileContent));
+    fs.writeFileSync('donate-gifts.json', JSON.stringify(fileContent, null, 2));
   } catch (e) {
     console.error(e);
     process.exit(0);

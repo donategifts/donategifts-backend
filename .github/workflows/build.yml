@@ -64,7 +64,7 @@ jobs:
         run: npm install
 
       - name: Create Firebase credential file
-        run: chmod +x ./firebase-credentials.js && ./firebase-credentials.js && ls -la
+        run: ./firebase-credentials.sh && cat donate-gifts.json
 
       - name: Eslint
         run: npm run lint
