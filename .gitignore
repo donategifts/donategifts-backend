@@ -10,6 +10,7 @@
 
 # build files
 dist
+build
 node_modules
 
 coverage
