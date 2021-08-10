@@ -1,33 +1,33 @@
-CREATE TYPE "ROLES" AS ENUM (
+CREATE TYPE "roles" AS ENUM (
   'GUEST',
   'DONOR',
   'AGENCY'
 );
 
-CREATE TYPE "AGENCY_ROLES" AS ENUM (
+CREATE TYPE "agency_roles" AS ENUM (
   'OWNER',
   'MEMBER'
 );
 
-CREATE TYPE "WISHCARD_STATUS" AS ENUM (
+CREATE TYPE "wishcard_status" AS ENUM (
   'DRAFT',
   'PUBLISHED',
   'DONATED'
 );
 
-CREATE TYPE "DONATION_STATUS" AS ENUM (
+CREATE TYPE "donation_status" AS ENUM (
   'DONATED',
   'SHIPPED',
   'ARRIVED'
 );
 
-CREATE TYPE "GENDER" AS ENUM (
+CREATE TYPE "gender" AS ENUM (
   'MALE',
   'FEMALE',
   'OTHER'
 );
 
-CREATE TYPE "ANIMAL_TYPE" AS ENUM (
+CREATE TYPE "animal_type" AS ENUM (
   'DOG',
   'CAT',
   'OTHER'
@@ -39,7 +39,7 @@ CREATE TABLE "user" (
   "lastName" varchar,
   "email" varchar UNIQUE NOT NULL,
   "uid" varchar UNIQUE NOT NULL,
-  "role" ROLES NOT NULL DEFAULT 'donor',
+  "role" roles NOT NULL DEFAULT 'DONOR',
   "createdAt" timestamp,
   "updatedAt" timestamp,
   "deletedAt" timestamp
@@ -48,7 +48,7 @@ CREATE TABLE "user" (
 CREATE TABLE "agencyMember" (
   "userId" int NOT NULL,
   "agencyId" int NOT NULL,
-  "agencyRole" AGENCY_ROLES DEFAULT 'member',
+  "agencyRole" agency_roles DEFAULT 'MEMBER',
   PRIMARY KEY ("userId", "agencyId")
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE "wishcard" (
   "addressId" int NOT NULL,
   "isLockedBy" int,
   "isLockedUntil" timestamp,
-  "status" WISHCARD_STATUS NOT NULL DEFAULT 'draft',
+  "status" wishcard_status NOT NULL DEFAULT 'DRAFT',
   "createdAt" timestamp,
   "updatedAt" timestamp,
   "deletedAt" timestamp
@@ -86,7 +86,7 @@ CREATE TABLE "wishcard" (
 CREATE TABLE "child" (
   "id" int PRIMARY KEY,
   "birthday" date,
-  "gender" GENDER,
+  "gender" gender,
   "firstName" varchar NOT NULL,
   "lastName" varchar,
   "interest" varchar,
@@ -99,8 +99,8 @@ CREATE TABLE "child" (
 CREATE TABLE "animal" (
   "id" int PRIMARY KEY,
   "name" varchar NOT NULL,
-  "gender" GENDER NOT NULL DEFAULT 'other',
-  "type" ANIMAL_TYPE,
+  "gender" gender NOT NULL DEFAULT 'OTHER',
+  "type" animal_type,
   "breed" varchar,
   "age" int,
   "bio" varchar,
@@ -142,7 +142,7 @@ CREATE TABLE "donation" (
   "wishcardId" int NOT NULL,
   "userId" int NOT NULL,
   "donationPrice" float NOT NULL,
-  "status" DONATION_STATUS NOT NULL DEFAULT 'donated',
+  "status" donation_status NOT NULL DEFAULT 'DONATED',
   "createdAt" timestamp,
   "updatedAt" timestamp,
   "deletedAt" timestamp
