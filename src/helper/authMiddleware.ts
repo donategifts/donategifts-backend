@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
 import * as admin from 'firebase-admin';
-import { auth } from 'firebase-admin/lib/auth';
 import { Context } from '../types/Context';
 import { Role, Roles } from '../entities/user';
 import prisma from '../db/prisma';
@@ -10,7 +9,7 @@ import { CustomError } from './customError';
 
 admin.initializeApp();
 
-async function getAndSetUserRole(token: auth.DecodedIdToken) {
+async function getAndSetUserRole(token: admin.auth.DecodedIdToken) {
   const user = await prisma.user.findUnique({
     where: {
       email: token.email,
