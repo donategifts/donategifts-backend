@@ -1,12 +1,12 @@
 name: Run build and test pipeline
 
-on:
-  pull_request:
-    types: [review_requested, ready_for_review]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    if: github.event.pull_request.draft == false
 
     env:
       MYSQL_USER: jack
