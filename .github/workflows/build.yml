@@ -8,6 +8,18 @@ jobs:
 
     if: github.event.pull_request.draft == false
 
+    services:
+      mysql:
+        image: mariadb:latest
+        env:
+          MYSQL_USER: mysql
+          MYSQL_PASSWORD: mysql
+          MYSQL_DATABASE: donategifts
+          MYSQL_ROOT_PASSWORD: mysqlroot
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
     env:
       FIREBASE_TOKEN_TYPE: ${{ secrets.FIREBASE_TOKEN_TYPE }}
       FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
@@ -19,17 +31,6 @@ jobs:
       FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
       FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}
       FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: mysql
-      MYSQL_DATABASE: donategifts
-      MYSQL_ROOT_PASSWORD: mysqlroot
-
-    services:
-      mysql:
-        image: mariadb:latest
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
       - name: Checkout
