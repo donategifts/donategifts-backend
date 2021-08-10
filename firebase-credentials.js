@@ -8,7 +8,7 @@
   const path = require('path');
 
   try {
-    const filePath = path.join(__dirname, './donate-gifts.json');
+    const filePath = path.join(__dirname, '../donate-gifts.json');
     if (fs.statSync(filePath)) {
       fs.unlinkSync(filePath);
     }
