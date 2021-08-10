@@ -1,12 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {
-  jest,
-  describe,
-  expect,
-  it,
-  beforeEach,
-  beforeAll,
-} from '@jest/globals';
+import { jest, describe, expect, it, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
 import { authMiddleware } from '../../src/helper/authMiddleware';
 import { CustomError } from '../../src/helper/customError';
@@ -17,13 +10,12 @@ jest.mock('firebase-admin', () => ({
     verifyIdToken: jest.fn().mockReturnValue({
       email: 'potter@hogwarts.com',
       uid: '1',
-      role: 'donor'
+      role: 'donor',
     }),
   })),
 }));
 
-beforeEach(() => {
-})
+beforeEach(() => {});
 describe('Helper', () => {
   describe('authMiddleware', () => {
     let mockRequest: Request;
@@ -43,7 +35,6 @@ describe('Helper', () => {
 
       expect(mockRequest.user).toHaveProperty('role');
     });
-
 
     it('should populate a full user object if authorization is provided', async () => {
       mockRequest = {
