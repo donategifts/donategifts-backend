@@ -9,23 +9,16 @@ jobs:
     if: github.event.pull_request.draft == false
 
     env:
-      MYSQL_USER: jack
-      MYSQL_PASSWORD: sparrow
-      MYSQL_ROOT_PASSWORD: asdf1234qwer
-      MYSQL_DATABASE: donategifts
-      MYSQL_URL: mysql://jack:sparrow@localhost:3306/donategifts
-
-    # services:
-    #   mysql:
-    #     image: mariadb:latest
-    #     env:
-    #       MYSQL_USER: mysql
-    #       MYSQL_PASSWORD: mysql
-    #       MYSQL_DATABASE: donategifts
-    #       MYSQL_ROOT_PASSWORD: mysqlroot
-    #     ports:
-    #       - 3306:3306
-    #     options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+      FIREBASE_TOKEN_TYPE: ${{ secrets.FIREBASE_TOKEN_TYPE }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+      FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+      FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+      FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
+      FIREBASE_AUTH_URI: ${{ secrets.FIREBASE_AUTH_URI }}
+      FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
+      FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}
+      FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }
 
     steps:
       - name: Checkout
@@ -33,14 +26,6 @@ jobs:
 
       - name: Build the docker-compose stack
         run: docker-compose up -d
-
-      # - name: Verify MariaDB connection
-      #   env:
-      #     PORT: 3306
-      #   run: |
-      #     while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-      #       sleep 1
-      #     done
 
       - name: Setup Node
         uses: actions/setup-node@v2
