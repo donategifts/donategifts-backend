@@ -30,7 +30,7 @@ describe('User resolver', () => {
     it('Should have errors if the permission does not match', async () => {
       const query = `
           {
-            user(email: "lkeems0@google.com.br") {
+            user(email: "marco@donategifts.com") {
               id
               firstName
               lastName
@@ -61,7 +61,7 @@ describe('User resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: 'admin',
+        userRole: 'ADMIN',
       });
 
       expect(result.errors[0]).toBeInstanceOf(GraphQLError);
@@ -71,8 +71,7 @@ describe('User resolver', () => {
     it('Should return a user object', async () => {
       const query = `
           {
-            user(email: "lkeems0@google.com.br") {
-              id
+            user(email: "marco@donategifts.com") {
               firstName
               lastName
               email
@@ -82,15 +81,14 @@ describe('User resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: 'admin',
+        userRole: 'ADMIN',
       });
 
       expect(result.data).toMatchObject({
         user: {
-          id: '1',
-          firstName: 'Loraine',
-          lastName: 'Keems',
-          email: 'lkeems0@google.com.br',
+          firstName: 'Marco',
+          lastName: 'Schuster',
+          email: 'marco@donategifts.com',
         },
       });
     });
@@ -129,7 +127,7 @@ describe('User resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: 'admin',
+        userRole: 'ADMIN',
       });
 
       expect(result.data.allUsers).toHaveLength(25);
@@ -145,7 +143,7 @@ describe('User resolver', () => {
 
       const result = await graphql(schema, query, undefined, {
         prisma,
-        userRole: 'admin',
+        userRole: 'ADMIN',
       });
 
       expect(result.data.allUsers.length).toBeGreaterThan(1);

@@ -1,4 +1,4 @@
-import { Args, Ctx, Resolver } from 'type-graphql';
+import { Args, Ctx, Mutation, Resolver } from 'type-graphql';
 import { roles } from '@prisma/client';
 import { CustomError } from '../helper/customError';
 import { Context } from '../types/Context';
@@ -8,10 +8,11 @@ import { User } from '../entities/user';
 
 @Resolver()
 export class AuthResolver {
+  @Mutation(() => User)
   public async signUp(
     @Ctx() context: Context,
     @Args() signUpArgs: SignUp,
-  ): Promise<{ user: User }> {
+  ): Promise<User> {
     const { emailToLower, role, firstName, lastName, uid } = signUpArgs;
     if (context.userRole !== roles.GUEST) {
       throw new CustomError({
@@ -22,7 +23,7 @@ export class AuthResolver {
     }
 
     try {
-      const createdUser = await context.prisma.user.create({
+      return await context.prisma.user.create({
         data: {
           firstName,
           lastName,
@@ -31,8 +32,6 @@ export class AuthResolver {
           uid,
         },
       });
-
-      return { user: createdUser };
     } catch (error) {
       throw handlePrismaError(error);
     }
