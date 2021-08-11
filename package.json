@@ -12,7 +12,7 @@
     "prisma:generate": "npx prisma generate",
     "prisma:introspect": "npx prisma introspect",
     "prisma:migrate-dev": "npx prisma migrate dev --name ",
-    "seed-database": "ts-node scripts/seed-db.ts",
+    "seed-database": "npx ts-node scripts/seed-db.ts",
     "start": "node dist/index.js",
     "init-database": "docker-compose up -d && npm run seed-database", 
     "test-integration:watch": "jest --runInBand --testPathIgnorePatterns tests/unit/ --watch",

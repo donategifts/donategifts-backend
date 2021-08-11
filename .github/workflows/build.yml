@@ -58,7 +58,7 @@ jobs:
         run: npm install
 
       - name: Build the docker-compose stack
-        run: docker-compose up -d && ts-node ./scripts/seed-db.ts
+        run: docker-compose up -d && npm run seed-database
 
       - name: Create Firebase credential file
         run: ./firebase-credentials.sh
