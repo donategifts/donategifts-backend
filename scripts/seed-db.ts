@@ -6,6 +6,7 @@ import prisma from '../src/db/prisma';
 faker.setLocale('en_US');
 
 (async () => {
+  await prisma.$connect();
   // --------------- internal user setup ---------------
   const generateInternalUsers = () => ({
     data: [
@@ -209,10 +210,10 @@ faker.setLocale('en_US');
     prisma.agencyMember.createMany(generateAgencyMembers()),
   );
 
+  // user -> done
   // address -> done
   // agency -> done
   // agencyMember -> done
-  // user -> done
   // child
   // animal
   // wishcard
@@ -228,7 +229,20 @@ faker.setLocale('en_US');
       randomAgencies,
       randomAgencyMembers,
     ]);
+    await prisma.$disconnect();
   } catch (e) {
+    // flush the database in case something breaks during seeding
+    await prisma.$queryRaw`
+      DELETE FROM message;
+      DELETE FROM donation;
+      DELETE FROM images;
+      DELETE FROM wishcard;
+      DELETE FROM child;
+      DELETE FROM agencyMember;
+      DELETE FROM agency;
+      DELETE FROM user;
+    `;
+    await prisma.$disconnect();
     console.error(e);
     process.exit(0);
   }
