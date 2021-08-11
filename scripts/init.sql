@@ -114,6 +114,7 @@ CREATE TABLE "images" (
   "id" SERIAL PRIMARY KEY,
   "wishcardId" int NOT NULL,
   "path" varchar NOT NULL,
+  "isPrimaryImage" boolean DEFAULT false,
   "createdAt" timestamp NOT NULL DEFAULT (now()),
   "updatedAt" timestamp NOT NULL DEFAULT (now()),
   "deletedAt" timestamp
