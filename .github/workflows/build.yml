@@ -1,77 +1,78 @@
-name: Run build and test pipeline
+# TODO: enable this stuff before merging again
+# name: Run build and test pipeline
 
-on: [push, pull_request]
+# on: [push]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    if: github.event.pull_request.draft == false
+#     if: github.event.pull_request.draft == false
 
-    services:
-      mysql:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DATABASE: donategifts
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+#     services:
+#       mysql:
+#         image: postgres:latest
+#         env:
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: postgres
+#           POSTGRES_DATABASE: donategifts
+#         ports:
+#           - 3306:3306
+#         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
-    env:
-      FIREBASE_TOKEN_TYPE: ${{ secrets.FIREBASE_TOKEN_TYPE }}
-      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-      FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
-      FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
-      FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
-      FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
-      FIREBASE_AUTH_URI: ${{ secrets.FIREBASE_AUTH_URI }}
-      FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
-      FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}
-      FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}
+#     env:
+#       FIREBASE_TOKEN_TYPE: ${{ secrets.FIREBASE_TOKEN_TYPE }}
+#       FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+#       FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+#       FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+#       FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+#       FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
+#       FIREBASE_AUTH_URI: ${{ secrets.FIREBASE_AUTH_URI }}
+#       FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
+#       FIREBASE_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_AUTH_PROVIDER_X509_CERT_URL }}
+#       FIREBASE_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_CLIENT_X509_CERT_URL }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
 
-      - name: Build the docker-compose stack
-        run: docker-compose up -d
+#       - name: Build the docker-compose stack
+#         run: docker-compose up -d
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
+#       - name: Setup Node
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: '16.x'
 
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+#       - name: Cache node modules
+#         uses: actions/cache@v2
+#         env:
+#           cache-name: cache-node-modules
+#         with:
+#           # npm cache files are stored in `~/.npm` on Linux/macOS
+#           path: ~/.npm
+#           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-build-${{ env.cache-name }}-
+#             ${{ runner.os }}-build-
+#             ${{ runner.os }}-
 
-      - name: Install modules
-        run: npm install
+#       - name: Install modules
+#         run: npm install
 
-      - name: Create Firebase credential file
-        run: ./firebase-credentials.sh
+#       - name: Create Firebase credential file
+#         run: ./firebase-credentials.sh
 
-      - name: Eslint
-        run: npm run lint
+#       - name: Eslint
+#         run: npm run lint
 
-      - name: Build project
-        run: npm run build
+#       - name: Build project
+#         run: npm run build
 
-      - name: Test
-        run: npm run coverage
+#       - name: Test
+#         run: npm run coverage
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN}}
+#       - name: Upload coverage to Codecov
+#         uses: codecov/codecov-action@v2
+#         with:
+#           token: ${{ secrets.CODECOV_TOKEN}}
