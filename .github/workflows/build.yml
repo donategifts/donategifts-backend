@@ -8,14 +8,14 @@ jobs:
 
     if: github.event.pull_request.draft == false
 
-    services:
-      postgres:
-        image: postgres:latest
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    # services:
+    #   postgres:
+    #     image: postgres:latest
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
 
     env:
       FIREBASE_TOKEN_TYPE: ${{ secrets.FIREBASE_TOKEN_TYPE }}
