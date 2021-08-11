@@ -1,4 +1,4 @@
 dist
 prisma
 node_modules
-scripts
+scripts/*.sql
