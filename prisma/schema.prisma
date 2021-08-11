@@ -9,7 +9,7 @@ datasource db {
 }
 
 model address {
-  id        Int        @id
+  id        Int        @id @default(autoincrement())
   address1  String     @db.VarChar
   address2  String?    @db.VarChar
   city      String     @db.VarChar
@@ -23,7 +23,7 @@ model address {
 }
 
 model agency {
-  id           Int            @id
+  id           Int            @id @default(autoincrement())
   name         String         @db.VarChar
   bio          String?        @db.VarChar
   isVerified   Boolean?       @default(false)
@@ -54,7 +54,7 @@ model agencyMember {
 }
 
 model animal {
-  id        Int          @id
+  id        Int          @id @default(autoincrement())
   name      String       @db.VarChar
   gender    gender       @default(OTHER)
   type      animal_type?
@@ -68,7 +68,7 @@ model animal {
 }
 
 model child {
-  id        Int        @id
+  id        Int        @id @default(autoincrement())
   birthday  DateTime?  @db.Date
   gender    gender?
   firstName String     @db.VarChar
@@ -82,7 +82,7 @@ model child {
 }
 
 model donation {
-  id            Int             @id
+  id            Int             @id @default(autoincrement())
   wishcardId    Int
   userId        Int
   donationPrice Float
@@ -98,7 +98,7 @@ model donation {
 }
 
 model images {
-  id         Int       @id
+  id         Int       @id @default(autoincrement())
   wishcardId Int
   path       String    @db.VarChar
   createdAt  DateTime  @default(now()) @db.Timestamp(6)
@@ -110,7 +110,7 @@ model images {
 }
 
 model message {
-  id         Int       @id
+  id         Int       @id @default(autoincrement())
   userId     Int
   wishcardId Int
   message    String    @db.VarChar
@@ -145,8 +145,7 @@ model user {
 }
 
 model wishcard {
-  id                            Int             @id
-  imagePath                     String          @db.VarChar
+  id                            Int             @id @default(autoincrement())
   itemPrice                     Float
   itemUrl                       String          @db.VarChar
   entityId                      Int

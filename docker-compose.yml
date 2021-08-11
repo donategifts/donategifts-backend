@@ -2,7 +2,8 @@ version: '3'
 
 services:
   postgres:
-    image: enubia/donate-gifts-dev-db
+    # image: enubia/donate-gifts-dev-db
+    image: postgres
     restart: always
     environment:
       POSTGRES_DB: '${POSTGRES_DATABASE}'

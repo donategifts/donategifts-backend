@@ -57,7 +57,7 @@ CREATE TABLE "agencyMember" (
 );
 
 CREATE TABLE "agency" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "bio" varchar,
   "isVerified" boolean DEFAULT false,
@@ -71,8 +71,7 @@ CREATE TABLE "agency" (
 );
 
 CREATE TABLE "wishcard" (
-  "id" int PRIMARY KEY,
-  "imagePath" varchar NOT NULL,
+  "id" SERIAL PRIMARY KEY,
   "itemPrice" float NOT NULL,
   "itemUrl" varchar NOT NULL,
   "entityId" int NOT NULL,
@@ -86,7 +85,7 @@ CREATE TABLE "wishcard" (
 );
 
 CREATE TABLE "child" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "birthday" date,
   "gender" gender,
   "firstName" varchar NOT NULL,
@@ -99,7 +98,7 @@ CREATE TABLE "child" (
 );
 
 CREATE TABLE "animal" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "gender" gender NOT NULL DEFAULT 'OTHER',
   "type" animal_type,
@@ -112,7 +111,7 @@ CREATE TABLE "animal" (
 );
 
 CREATE TABLE "images" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "wishcardId" int NOT NULL,
   "path" varchar NOT NULL,
   "createdAt" timestamp NOT NULL DEFAULT (now()),
@@ -121,7 +120,7 @@ CREATE TABLE "images" (
 );
 
 CREATE TABLE "address" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "address1" varchar NOT NULL,
   "address2" varchar,
   "city" varchar NOT NULL,
@@ -133,7 +132,7 @@ CREATE TABLE "address" (
 );
 
 CREATE TABLE "message" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "userId" int NOT NULL,
   "wishcardId" int NOT NULL,
   "message" varchar NOT NULL,
@@ -143,7 +142,7 @@ CREATE TABLE "message" (
 );
 
 CREATE TABLE "donation" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "wishcardId" int NOT NULL,
   "userId" int NOT NULL,
   "donationPrice" float NOT NULL,
