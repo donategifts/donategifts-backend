@@ -1,7 +1,8 @@
 CREATE TYPE "roles" AS ENUM (
   'GUEST',
   'DONOR',
-  'AGENCY'
+  'AGENCY',
+  'ADMIN'
 );
 
 CREATE TYPE "agency_roles" AS ENUM (

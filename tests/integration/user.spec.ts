@@ -1,10 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { describe, it, expect, afterAll } from '@jest/globals';
-import { PrismaClient } from '@prisma/client';
 import { graphql, GraphQLError } from 'graphql';
 import { schema } from '../../src/schema';
-
-const prisma = new PrismaClient();
+import prisma from '../../src/db/prisma';
 
 afterAll(() => {
   prisma.$disconnect();

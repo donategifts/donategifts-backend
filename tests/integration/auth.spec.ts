@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { describe, it, afterAll, expect } from '@jest/globals';
-import { PrismaClient, roles } from '@prisma/client';
+import { roles } from '@prisma/client';
 import { graphql } from 'graphql';
 import { schema } from '../../src/schema';
+import prisma from '../../src/db/prisma';
 
-const prisma = new PrismaClient();
 const userEmail = `lettuce${new Date()}@king.com`;
 
 afterAll(() => {

@@ -1,7 +1,7 @@
 import { Authorized, Field, ID } from 'type-graphql';
-import { wishcard_status, roles } from '.prisma/client';
+import { wishcard_status, roles } from '@prisma/client';
 
-export const Wishcard_Status = wishcard_status;
+export const WishcardStatus = wishcard_status;
 
 export class WishCard {
   @Authorized([roles.ADMIN])
