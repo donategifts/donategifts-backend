@@ -1,6 +1,5 @@
-import { user_role } from '@prisma/client';
 import { ArgsType, Field } from 'type-graphql';
-import { LoginMode } from '../entities/user';
+import { roles } from '@prisma/client';
 
 @ArgsType()
 export class SignUp {
@@ -14,13 +13,10 @@ export class SignUp {
   public email: string;
 
   @Field()
-  public password: string;
+  public role: roles;
 
   @Field()
-  public loginMode: LoginMode;
-
-  @Field()
-  public role: user_role;
+  public uid: string;
 
   public get emailToLower(): string {
     return this.email.toLowerCase();

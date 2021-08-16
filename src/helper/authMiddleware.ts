@@ -1,37 +1,66 @@
 import { Request, Response, NextFunction } from 'express';
 import { AuthChecker } from 'type-graphql';
+import * as admin from 'firebase-admin';
+import { roles } from '@prisma/client';
 import { Context } from '../types/Context';
-import { Role, Roles } from '../entities/user';
-import { extractTokenFromAuthorization } from './jwt';
+import prisma from '../db/prisma';
+import { logger } from './logger';
+import { CustomError } from './customError';
 
-export const authMiddleware = (
+admin.initializeApp();
+
+async function getAndSetUserRole(token: admin.auth.DecodedIdToken) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: token.email,
+    },
+  });
+
+  if (!user) {
+    throw new CustomError({
+      message: 'No user found with that email',
+      code: 'User not found',
+      status: 403,
+    });
+  }
+
+  await admin.auth().setCustomUserClaims(token.uid, { role: user.role });
+
+  return user.role;
+}
+
+export const authMiddleware = async (
   req: Request,
   _res: Response,
   next: NextFunction,
-): void => {
+): Promise<void> => {
   req.user = {};
 
-  if (req.headers && req.headers.authorization) {
-    const decoded = extractTokenFromAuthorization(req.headers.authorization);
-
-    if (decoded && !decoded.isRefreshToken) {
-      const { email, role } = decoded;
-
+  try {
+    if (!req.headers || !req.headers.authorization) {
       req.user = {
-        email,
-        role,
+        role: roles.GUEST,
       };
+      return next();
     }
-  } else {
+
+    const decodedToken = await admin
+      .auth()
+      .verifyIdToken(req.headers.authorization);
+
     req.user = {
-      role: Number(process.env.SKIP_AUTH) ? Roles.ADMIN : Roles.GUEST,
+      email: decodedToken.email,
+      role: decodedToken.role || (await getAndSetUserRole(decodedToken)),
+      uid: decodedToken.uid,
     };
+  } catch (error) {
+    logger.error(error);
   }
 
   return next();
 };
 
-export const customAuthChecker: AuthChecker<Context, Role> = (
+export const customAuthChecker: AuthChecker<Context, roles> = (
   { context },
-  roles,
-) => roles.includes(context.userRole);
+  userRoles,
+) => userRoles.includes(context.userRole);

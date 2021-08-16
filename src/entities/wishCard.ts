@@ -1,61 +1,56 @@
 import { Authorized, Field, ID } from 'type-graphql';
-import { wish_card_status } from '.prisma/client';
-import { Roles } from './user';
+import { wishcard_status, roles } from '@prisma/client';
 
-export enum WishCardStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-  DONATED = 'donated',
-}
+export const WishcardStatus = wishcard_status;
 
 export class WishCard {
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'WishCard id in the system' })
   public id: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'image',
     description: '',
   })
   public image: string;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'itemPrice',
     description: '',
   })
   public itemPrice: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'itemUrl',
     description: '',
   })
   public itemUrl: string;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'childId',
     description: '',
   })
   public childId: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'agencyId',
     description: '',
   })
   public agencyId: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'createdBy',
     description: '',
   })
   public createdBy: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field(() => ID, {
     name: 'isLockedBy',
     description: '',
@@ -63,7 +58,7 @@ export class WishCard {
   })
   public isLockedBy: number;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'isLockedUntil',
     description: '',
@@ -71,14 +66,14 @@ export class WishCard {
   })
   public isLockedUntil: Date;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'status',
     description: '',
   })
-  public status: wish_card_status;
+  public status: wishcard_status;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'occasion',
     description: '',
@@ -86,21 +81,21 @@ export class WishCard {
   })
   public occasion: string;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'createdAt',
     description: '',
   })
   public createdAt: Date;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'updatedAt',
     description: '',
   })
   public updatedAt: Date;
 
-  @Authorized([Roles.ADMIN])
+  @Authorized([roles.ADMIN])
   @Field({
     name: 'deletedAt',
     description: '',
