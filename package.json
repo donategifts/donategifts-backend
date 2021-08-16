@@ -3,7 +3,7 @@
   "description": "Every child should feel valued, remembered, and loved Donate holiday & birthday gifts to the kids who may not otherwise get one ",
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf ./node_modules ./dist",
+    "clean": "rimraf ./dist ./coverage ./node_modules",
     "coverage": "jest --runInBand --coverage",
     "dev": "GOOGLE_APPLICATION_CREDENTIALS=donate-gifts.json nodemon --inspect=0.0.0.0:9229 -e ts,js -w src --exec node -r ./loadEnv.js -r ts-node/register src/",
     "husky": "npx husky install",
@@ -14,7 +14,7 @@
     "prisma:migrate-dev": "npx prisma migrate dev --name ",
     "seed-database": "npx ts-node scripts/seed-db.ts",
     "start": "node dist/index.js",
-    "init-database": "docker-compose up -d && npm run seed-database", 
+    "init-database": "docker-compose up -d && npm run seed-database",
     "test-integration:watch": "jest --runInBand --testPathIgnorePatterns tests/unit/ --watch",
     "test-integration": "jest --runInBand --testPathIgnorePatterns tests/unit/",
     "test:watch": "jest --testPathIgnorePatterns tests/integration/ --watch",

@@ -98,13 +98,14 @@ model donation {
 }
 
 model images {
-  id         Int       @id @default(autoincrement())
-  wishcardId Int
-  path       String    @db.VarChar
-  createdAt  DateTime  @default(now()) @db.Timestamp(6)
-  updatedAt  DateTime  @default(now()) @db.Timestamp(6)
-  deletedAt  DateTime? @db.Timestamp(6)
-  wishcard   wishcard  @relation(fields: [wishcardId], references: [id])
+  id             Int       @id @default(autoincrement())
+  wishcardId     Int
+  path           String    @db.VarChar
+  isPrimaryImage Boolean?  @default(false)
+  createdAt      DateTime  @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime  @default(now()) @db.Timestamp(6)
+  deletedAt      DateTime? @db.Timestamp(6)
+  wishcard       wishcard  @relation(fields: [wishcardId], references: [id])
 
   @@index([wishcardId], name: "images_wishcardId_idx")
 }
@@ -159,8 +160,8 @@ model wishcard {
   address                       address         @relation(fields: [addressId], references: [id])
   agency                        agency          @relation(fields: [agencyId], references: [id])
   user_userTowishcard_createdBy user            @relation("userTowishcard_createdBy", fields: [createdBy], references: [id])
-  animal                        animal          @relation(fields: [entityId], references: [id])
   child                         child           @relation(fields: [entityId], references: [id])
+  animal                        animal          @relation(fields: [entityId], references: [id])
   donation                      donation[]
   images                        images[]
   message                       message[]
