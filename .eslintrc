@@ -133,7 +133,8 @@
         "args": "after-used",
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "react/jsx-filename-extension": "off"
   },
   "env": {
     "jest": true,
