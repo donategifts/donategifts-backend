@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import type { Role } from '../entities/user';
+import { PrismaClient, roles } from '@prisma/client';
 
 export interface Context {
   req: Express.Request;
-  userRole: Role;
+  userRole: roles;
   prisma: PrismaClient;
 }
