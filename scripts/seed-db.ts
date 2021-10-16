@@ -460,14 +460,12 @@ faker.setLocale('en_US');
     // flush the database in case something breaks during seeding
     for (const {
       tablename,
-    } of await prisma.$queryRaw`SELECT tablename FROM pg_tables WHERE schemaname='public'`) {
+    } of (await prisma.$queryRaw`SELECT tablename FROM pg_tables WHERE schemaname='public'`) as any) {
       if (tablename !== '_prisma_migrations') {
         try {
-          await prisma.$queryRaw(`TRUNCATE TABLE "${tablename}" CASCADE;`);
+          await prisma.$queryRaw`TRUNCATE TABLE "${tablename}" CASCADE`;
           if (tablename !== 'agencyMember') {
-            await prisma.$queryRaw(
-              `ALTER SEQUENCE ${tablename}_id_seq RESTART WITH 1`,
-            );
+            await prisma.$queryRaw`ALTER SEQUENCE ${tablename}_id_seq RESTART WITH 1`;
           }
         } catch (error) {
           logger.error({ error });

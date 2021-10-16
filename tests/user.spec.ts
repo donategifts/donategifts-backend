@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { describe, it, expect, afterAll } from '@jest/globals';
 import { graphql, GraphQLError } from 'graphql';
-import { schema } from '../../src/schema';
-import prisma from '../../src/db/prisma';
+import { schema } from '../src/schema';
+import prisma from '../src/db/prisma';
 
 afterAll(() => {
   prisma.$disconnect();
@@ -135,7 +135,7 @@ describe('User resolver', () => {
     it('Should return a user list from given params', async () => {
       const query = `
           {
-            allUsers(firstName: "ro") {
+            allUsers(firstName: "Stacy") {
               id
             }
           }
@@ -146,7 +146,8 @@ describe('User resolver', () => {
         userRole: 'ADMIN',
       });
 
-      expect(result.data.allUsers.length).toBeGreaterThan(1);
+      // greate than or equal because we generate random names, but stacy is always there
+      expect(result.data.allUsers.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

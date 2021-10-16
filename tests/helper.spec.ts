@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { jest, describe, expect, it, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
-import { authMiddleware } from '../../src/helper/authMiddleware';
-import { CustomError } from '../../src/helper/customError';
+import { authMiddleware } from '../src/helper/authMiddleware';
+import { CustomError } from '../src/helper/customError';
 
 jest.mock('firebase-admin', () => ({
   initializeApp: jest.fn(),

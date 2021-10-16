@@ -2,9 +2,9 @@
 import { describe, it, afterAll, expect } from '@jest/globals';
 import { roles } from '@prisma/client';
 import { graphql } from 'graphql';
-import { schema } from '../../src/schema';
-import prisma from '../../src/db/prisma';
-import { logger } from '../../src/helper/logger';
+import { schema } from '../src/schema';
+import prisma from '../src/db/prisma';
+import { logger } from '../src/helper/logger';
 
 afterAll(() => {
   prisma.$disconnect();

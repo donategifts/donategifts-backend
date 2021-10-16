@@ -1,3 +1,5 @@
+import { resolve } from 'path';
+import { readFileSync } from 'fs';
 import {
   createTestAccount,
   createTransport,
@@ -5,8 +7,6 @@ import {
 } from 'nodemailer';
 import * as mailGun from 'nodemailer-mailgun-transport';
 import { format } from 'date-fns';
-import { resolve } from 'path';
-import { readFileSync } from 'fs';
 import { CustomError } from './customError';
 
 const emailTemplate = readFileSync(
