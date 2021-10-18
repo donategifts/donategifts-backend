@@ -1,6 +1,6 @@
 import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
 import { roles } from '@prisma/client';
-import { Context } from '../types/Context';
+import { IContext } from '../types/Context';
 import { User } from '../entities/user';
 import { CustomError } from '../helper/customError';
 import { handlePrismaError } from '../helper/prismaErrorHandler';
@@ -8,8 +8,8 @@ import { handlePrismaError } from '../helper/prismaErrorHandler';
 @Resolver(User)
 export class UserResolver {
   @Query(() => User)
-  public async user(
-    @Ctx() context: Context,
+  public async getuser(
+    @Ctx() context: IContext,
     @Arg('id', { nullable: true }) id?: number,
     @Arg('email', { nullable: true }) email?: string,
   ): Promise<User> {
@@ -49,8 +49,8 @@ export class UserResolver {
 
   @Query(() => [User])
   @Authorized([roles.ADMIN])
-  public async allUsers(
-    @Ctx() context: Context,
+  public async getAllUsers(
+    @Ctx() context: IContext,
     @Arg('firstName', { nullable: true }) firstName?: string,
     @Arg('lastName', { nullable: true }) lastName?: string,
     @Arg('limit', { nullable: true }) limit: number = 25,

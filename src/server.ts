@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { createServer } from 'http';
-import * as cors from 'cors';
-import * as express from 'express';
+import cors from 'cors';
+import express from 'express';
 import { ApolloServer, ApolloError } from 'apollo-server-express';
 import { GraphQLError } from 'graphql';
 import prisma from './db/prisma';

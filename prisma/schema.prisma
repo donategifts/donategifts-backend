@@ -8,6 +8,11 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../prisma/generated/type-graphql"
+}
+
 model address {
   id        Int        @id @default(autoincrement())
   address1  String     @db.VarChar

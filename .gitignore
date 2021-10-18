@@ -18,3 +18,5 @@ coverage
 _NotUsed
 
 donate-gifts.json
+
+prisma/generated/*

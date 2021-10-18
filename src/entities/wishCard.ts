@@ -3,17 +3,26 @@ import { wishcard_status, roles } from '@prisma/client';
 
 export const WishcardStatus = wishcard_status;
 
+// agencyId
+// createdBy
+// addressId
+// status
+// createdAt
+// updatedAt
+// deletedAt
+// address
+// agency
+// user_userTowishcard_createdBy
+// child
+// animal
+// donation
+// images
+// message
+
 export class WishCard {
   @Authorized([roles.ADMIN])
   @Field(() => ID, { name: 'id', description: 'WishCard id in the system' })
   public id: number;
-
-  @Authorized([roles.ADMIN])
-  @Field({
-    name: 'image',
-    description: '',
-  })
-  public image: string;
 
   @Authorized([roles.ADMIN])
   @Field({
@@ -31,10 +40,10 @@ export class WishCard {
 
   @Authorized([roles.ADMIN])
   @Field(() => ID, {
-    name: 'childId',
+    name: 'entityId',
     description: '',
   })
-  public childId: number;
+  public entityId: number;
 
   @Authorized([roles.ADMIN])
   @Field(() => ID, {
@@ -42,6 +51,13 @@ export class WishCard {
     description: '',
   })
   public agencyId: number;
+
+  @Authorized([roles.ADMIN])
+  @Field(() => ID, {
+    name: 'childId',
+    description: '',
+  })
+  public childId: number;
 
   @Authorized([roles.ADMIN])
   @Field(() => ID, {
@@ -102,4 +118,11 @@ export class WishCard {
     nullable: true,
   })
   public deletedAt: Date;
+
+  @Authorized([roles.ADMIN])
+  @Field({
+    name: 'images',
+    description: '',
+  })
+  public images: string;
 }

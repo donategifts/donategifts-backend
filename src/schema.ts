@@ -1,11 +1,10 @@
 import { buildSchemaSync } from 'type-graphql';
+import { resolvers } from '../prisma/generated/type-graphql';
 import { pubsub } from './helper/pubSub';
-import { UserResolver } from './resolver/userResolver';
 import { customAuthChecker } from './helper/authMiddleware';
-import { AuthResolver } from './resolver/authResolver';
 
 export const schema = buildSchemaSync({
-  resolvers: [UserResolver, AuthResolver],
+  resolvers,
   authChecker: customAuthChecker,
   pubSub: pubsub,
 });
