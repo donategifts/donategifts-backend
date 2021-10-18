@@ -10,7 +10,7 @@ Our platform also hosts birthday clubs and annual holiday gift drives for the ch
 
 > 1.0 - Node, Mongo, EJS, CSS, Docker
 
-> 2.0 (Current Plan) - Typescript, SQL, React, SCSS, Docker
+> 2.0 (Current Plan) - Typescript, GraphQL, SQL (Postgres), React (Next.js), SCSS, Docker
 
 # Live Production:
 
@@ -38,43 +38,36 @@ Our platform also hosts birthday clubs and annual holiday gift drives for the ch
 
 ## Questions?
 
-Non-member? support@donate-gifts.com
-Member? slack #dev-collab-convo
+> Non-member? support@donate-gifts.com
+
+> Member? slack #dev-collab-convo
 
 ## Usage
 
-Install Mongo or use Docker to spin up a Docker container
-start container with:
-`docker-compose up`
+1. Install packages using 
 
-Dev Env runs with example/test config.env
+> `npm install`
 
-Production runs with config.env (keys protected)
+2. Install Postgres or Install docker and spin up a Docker container using:
 
-Dev server uses a separate db
+> `sudo docker-compose up`
 
-public dir has all the static components and assets
+3. Run seeder script to seed the database:
 
-We are saving media files to AWS S3
+> `npm run init-database`
 
-add more test files in **tests** dir
-
-## Install Dependencies
-
-```
-npm install
-prisma generate
-```
+4. Before running the app, ping one of the team members on slack to get donate-gifts.json file. Alternatively you can run it using your own firebase credentials (replace details firebase-credentials file and run the script to generate the json file).
 
 ## Run App
 
-```
-# Run in dev mode
-npx nodemon app.js  ||  npm run dev
+### Run in dev mode
 
-# Run in prod mode
-node app.js ||  npm start
-```
+> `npx nodemon app.js  ||  npm run dev`
+
+### Run in prod mode
+
+> `node app.js ||  npm start`
+
 
 ## Demo
 
