@@ -9,6 +9,7 @@ import { CustomError } from './helper/customError';
 import { schema } from './schema';
 import { authMiddleware } from './helper/authMiddleware';
 import { logger } from './helper/logger';
+import { environment } from './helper/environment';
 
 const isProductionMode = process.env.NODE_ENV === 'production';
 
@@ -56,7 +57,23 @@ export const boot = async (): Promise<void> => {
 
   const app = express();
 
-  app.use(cors());
+  app.use(
+    '/graphql',
+    cors({
+      origin(origin, callback) {
+        if (
+          environment[process.env.NODE_ENV || 'development'].origin.includes(
+            origin,
+          )
+        ) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      optionsSuccessStatus: 200,
+    }),
+  );
 
   app.use(authMiddleware);
 
