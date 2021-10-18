@@ -10,8 +10,11 @@ import {
   wishcard_status,
 } from '@prisma/client';
 import { Sql } from '@prisma/client/runtime';
+import { config } from 'dotenv';
 import prisma from '../src/db/prisma';
 import { logger } from '../src/helper/logger';
+
+config();
 
 (async () => {
   try {
