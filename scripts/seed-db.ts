@@ -9,10 +9,9 @@ import {
   roles,
   wishcard_status,
 } from '@prisma/client';
+import { Sql } from '@prisma/client/runtime';
 import prisma from '../src/db/prisma';
 import { logger } from '../src/helper/logger';
-
-faker.setLocale('en_US');
 
 (async () => {
   try {
@@ -458,14 +457,18 @@ faker.setLocale('en_US');
   } catch (e) {
     logger.error(e);
     // flush the database in case something breaks during seeding
-    for (const {
-      tablename,
-    } of (await prisma.$queryRaw`SELECT tablename FROM pg_tables WHERE schemaname='public'`) as any) {
+    for (const { tablename } of (await prisma.$queryRaw(
+      `SELECT tablename FROM pg_tables WHERE schemaname='public'` as unknown as Sql,
+    )) as any) {
       if (tablename !== '_prisma_migrations') {
         try {
-          await prisma.$queryRaw`TRUNCATE TABLE "${tablename}" CASCADE`;
+          await prisma.$queryRaw(
+            `TRUNCATE TABLE "${tablename}" CASCADE` as unknown as Sql,
+          );
           if (tablename !== 'agencyMember') {
-            await prisma.$queryRaw`ALTER SEQUENCE ${tablename}_id_seq RESTART WITH 1`;
+            await prisma.$queryRaw(
+              `ALTER SEQUENCE ${tablename}_id_seq RESTART WITH 1` as unknown as Sql,
+            );
           }
         } catch (error) {
           logger.error({ error });
