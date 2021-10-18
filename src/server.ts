@@ -131,6 +131,6 @@ export const boot = async (): Promise<void> => {
     // logger.info(
     //   `Subscriptions ready at ws://localhost:${port}${server.graphqlPath}`,
     // );
-    logger.info(`GraphiQL ready at http://localhost:${port}/graphiql`);
+    // logger.info(`GraphiQL ready at http://localhost:${port}/graphiql`);
   });
 };
