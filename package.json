@@ -35,7 +35,7 @@
     "date-fns": "2.28.0",
     "dotenv": "16.0.0",
     "express": "4.17.3",
-    "firebase-admin": "10.0.2",
+    "firebase-admin": "10.3.0",
     "graphql": "15.8.0",
     "graphql-fields": "2.0.3",
     "graphql-scalars": "1.16.0",
